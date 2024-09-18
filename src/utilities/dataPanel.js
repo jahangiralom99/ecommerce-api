@@ -10,8 +10,4 @@ const header = {
   "Content-Type": "application/json",
 };
 
-
-export {base_url, fetch_url, header};
-
-
-
+export { base_url, fetch_url, header };

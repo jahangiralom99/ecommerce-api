@@ -7,16 +7,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext, UserContext } from "../../App";
 import logo from "../../assets/ad-logo (1).svg";
+import { addToProceed } from "../../utilities/functions";
+import { toast } from "react-toastify";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
   const { cartItems } = useContext(CartContext);
   const { user, setUser } = useContext(UserContext);
+  const { setCartItems } = useContext(CartContext);
 
   const logOut = () => {
-    setUser("");
-    localStorage.clear();
-    navigate("/");
+    // Clear user session and cart data
+    addToProceed(null, "token"); // Remove the token
+    addToProceed(null, "cart"); // Remove the cart
+    setUser(null); // Reset the user state
+    setCartItems(0); // Reset cart items count
+
+    // Provide user feedback
+    toast("Logged out successfully");
+
+    // Redirect to the login page or home page
+    navigate("/login");
   };
 
   return (

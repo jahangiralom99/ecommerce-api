@@ -26,7 +26,7 @@ const AllCategory = () => {
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-5">
           {grpData
-            .filter((main) => main.is_group == 1 && main.name !== "Grocery")
+            .filter((main) => main.is_group == 0)
             .map((grp, idx) => (
               <div key={idx} className="group relative cursor-pointer">
                 <div
@@ -37,11 +37,11 @@ const AllCategory = () => {
                     <a href="#">
                       <img className="w-7" src={category1} alt="" />
                     </a>
-                    <a href="#" className="text-sm hover:text-[#F15B2D]">
+                    <a className="text-sm hover:text-[#F15B2D]">
                       {grp.name}
                     </a>
                   </div>
-                  <a href="#">
+                  <a>
                     <FaChevronDown className="text-blue-500 text-sm " />
                   </a>
                 </div>
@@ -52,7 +52,7 @@ const AllCategory = () => {
                   {grpData
                     .filter((main) => main.is_group === 0)
                     .map((grp, idx) =>
-                      grp.parent_item_group == hoveredName ? (
+                      grp.name == hoveredName ? (
                         <Link to={`/category/${idx}`} key={idx}>
                           <li className="mb-2 hover:text-[#F15B2D]">
                             {grp.name}

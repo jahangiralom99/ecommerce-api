@@ -4,17 +4,20 @@ import { GrUserManager } from "react-icons/gr";
 import { IoIosHeartEmpty } from "react-icons/io";
 import category1 from "../../assets/category1.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext, UserContext } from "../../App";
 import logo from "../../assets/ad-logo (1).svg";
 import { addToProceed } from "../../utilities/functions";
 import { toast } from "react-toastify";
+import { base_url, fetch_url, header } from "../../utilities/dataPanel";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
   const { cartItems } = useContext(CartContext);
   const { user, setUser } = useContext(UserContext);
   const { setCartItems } = useContext(CartContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   const logOut = () => {
     // Clear user session and cart data
@@ -30,6 +33,27 @@ const Navbar2 = () => {
     navigate("/login");
   };
 
+  // handle Search btn
+  const handleSearch = async () => {
+    const query = encodeURIComponent(
+      `[["item_name", "like", "%${searchQuery}%"]]`
+    );
+    const url = `${fetch_url}/gets/Item?filters=${query}&fields=["*"]`;
+
+    try {
+      const groupsData = await fetch(url, {
+        method: "GET",
+        headers: header,
+      });
+
+      const data = await groupsData.json();
+      console.log(data);
+      setSearchResult(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <div>
       <div className="bg-base-100 md:w-full flex justify-center items-center md:pt-10 p-2 px-4">
@@ -40,15 +64,38 @@ const Navbar2 = () => {
         </div>
 
         {/* search start */}
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center relative">
           <div className="navbar-end flex justify-center pt-2">
-            <div className="form-control">
+            <div onChange={handleSearch} className="form-control">
               <input
                 type="text"
                 placeholder="Search"
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="input input-bordered lg:w-[350px] md:w-[200px] w-24 rounded-none rounded-l-lg bg-[#F5F5F5] md:block hidden"
               />
             </div>
+            {/* Display search results */}
+            <div className="bg-white absolute overflow-y-scroll top-14 z-50 left-0">
+              {searchResult.length > 0 && searchQuery && (
+                <ul className="h-44 w-96">
+                  {searchResult.map((item, index) => (
+                    <Link
+                      to={`/item/${item?.item_code}`}
+                      className="p-4 flex items-center gap-3 hover:border"
+                      key={index}
+                    >
+                      <img
+                        className="w-24 h-12 object-contain"
+                        src={base_url + item.image}
+                        alt={item.name}
+                      />
+                      <p>{item.item_name}</p>
+                    </Link>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             <div className="flex justify-center items-center">
               <button className=" md:bg-black bg-transparent md:border-2 md:btn border-none md:text-white md:rounded-r-md md:rounded-none rounded-none rounded-r-lg md:mr-32">
                 <svg

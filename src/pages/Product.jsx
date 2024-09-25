@@ -81,6 +81,12 @@ const Product = () => {
     });
   };
 
+  const [activeSize, setActiveSize] = useState(null);
+
+  const handleClick = (size) => {
+    setActiveSize(size);
+  };
+
   return (
     <>
       <Title title="Product" />
@@ -150,7 +156,7 @@ const Product = () => {
                 </div>
               </div>
               <hr className="mt-4" />
-              <div className="flex gap-2 mt-3">
+              {/* <div className="flex gap-2 mt-3">
                 <h1 className="text-[#757575]">Color Family</h1>
                 <div className="">
                   <h1 className="">Not Specified</h1>
@@ -158,26 +164,21 @@ const Product = () => {
                     Not Specified
                   </button>
                 </div>
-              </div>
-              <div className="flex gap-20 mt-5">
-                <h1 className="text-[#757575]">Size</h1>
-                <div className="">
-                  <h1 className="">Int </h1>
-                  <div className="flex gap-2 items-center">
-                    <button className="py-1 text-[#f36f21] px-1 md:px-4  md:text-[14px] text-xs border mt-1 border-[#f36f21]">
-                      M
-                    </button>
-                    <button className="py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ">
-                      XXL
-                    </button>
-                    <button className="py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ">
-                      L
-                    </button>
-                    <button className="py-1 px-1  md:px-4 text-xs md:text-[14px] border mt-1">
-                      XL
-                    </button>
-                  </div>
-                </div>
+              </div> */}
+              <div className="flex gap-2 items-center">
+                {["M", "XXL", "L", "XL"].map((size) => (
+                  <button
+                    key={size}
+                    className={`py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ${
+                      activeSize === size
+                        ? "bg-[#f36f21] text-white"
+                        : "border-[#f36f21] text-[#f36f21]"
+                    }`}
+                    onClick={() => handleClick(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
               <div className="flex gap-12 mt-8">
                 <h1 className="text-[#757575]">Quantity</h1>
@@ -187,21 +188,21 @@ const Product = () => {
                     disabled={count > 0 ? false : true}
                     className={`border text-center w-8 font-bold ${
                       count > 0
-                        ? "bg-[#fafafa]"
-                        : "text-red-600 border-red-600 cursor-not-allowed"
+                        ? " text-red-600 border-red-600"
+                        : " cursor-not-allowed bg-[#fafafa]"
                     }`}
                   >
                     -
                   </button>
                   <input
-                    className="w-12 text-center px-2 border border-black bg-black text-white"
+                    className="w-12 focus:border-none outline-none text-center px-2 border bg-[#f36f21] text-white"
                     type="text"
                     value={count}
                     readOnly
                   />
                   <button
                     onClick={() => setCount(count + 1)}
-                    className="border text-center w-8 font-bold bg-[#fafafa]"
+                    className="border text-[#f36f21] border-[#f36f21] text-center w-8 font-bold bg-[#fafafa]"
                   >
                     +
                   </button>
@@ -309,7 +310,7 @@ const Product = () => {
                 </div>
                 <p className="text-[#1a9cb7] font-bold">CHAT</p>
               </div>
-              <div className="flex mt-4 justify-between">
+              {/* <div className="flex mt-4 justify-between">
                 <div className="p-4 border">
                   <p className="text-[14px]">Warranty not available</p>
                   <h1 className="text-xl font-semibold mt-4">70%</h1>
@@ -324,7 +325,7 @@ const Product = () => {
                     Not enough data
                   </h1>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* Ratings & Reviews */}

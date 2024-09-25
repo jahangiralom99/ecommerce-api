@@ -1,20 +1,20 @@
-import {useContext, useState} from "react";
-import {useForm} from "react-hook-form";
-import {formatDate, postData} from "../../utilities/functions";
-import {toast} from "react-toastify";
-import {UserContext} from "../../App";
-import {useNavigate} from "react-router-dom";
-import {base_url} from "../../utilities/dataPanel";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { formatDate, postData } from "../../utilities/functions";
+import { toast } from "react-toastify";
+import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { base_url } from "../../utilities/dataPanel";
 
-const From = ({formatStyle, landing}) => {
+const From = ({ formatStyle, landing }) => {
   const navigate = useNavigate();
-  const {userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [totalValue, setTotalValue] = useState(0);
 
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm();
 
   const onSubmit = () => {
@@ -51,10 +51,17 @@ const From = ({formatStyle, landing}) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-screen-xl mx-auto px-3 mt-8">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-screen-xl mx-auto px-3 mt-8"
+    >
       <div>
-        <h1 className="text-3xl font-extrabold text-[#d3ac2b] text-center">{formatStyle("custom_heading_17")}</h1>
-        <p className="text-xl font-extrabold max-w-screen-md mx-auto text-red-500 text-center mt-4 leading-10	">{formatStyle("custom_heading_18")}</p>
+        <h1 className="text-3xl font-extrabold text-[#d3ac2b] text-center">
+          {formatStyle("custom_heading_17")}
+        </h1>
+        <p className="text-xl font-extrabold max-w-screen-md mx-auto text-red-500 text-center mt-4 leading-10	">
+          {formatStyle("custom_heading_18")}
+        </p>
       </div>
       {/* From starts */}
       <section className="flex flex-col gap-6 md:flex-row justify-center mt-12 ">
@@ -69,12 +76,14 @@ const From = ({formatStyle, landing}) => {
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
                 value={userData[0]?.customer_name}
-                {...register("name", {required: true})}
+                {...register("name", { required: true })}
                 placeholder="আপনার নাম লিখুন"
                 id="text"
                 autoComplete="text"
               />
-              {errors.name && <p className="text-red-600">আপনার নাম is Required</p>}
+              {errors.name && (
+                <p className="text-red-600">আপনার নাম is Required</p>
+              )}
             </div>
             <div className="mt-4 ">
               <label className="block text-sm font-bold mb-2">
@@ -84,12 +93,14 @@ const From = ({formatStyle, landing}) => {
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
                 value={userData[0]?.primary_address}
-                {...register("address", {required: true})}
+                {...register("address", { required: true })}
                 placeholder="আপনার ঠিকানা লিখুন"
                 id="text"
                 autoComplete="text"
               />
-              {errors.address && <p className="text-red-600">আপনার ঠিকানা is Required</p>}
+              {errors.address && (
+                <p className="text-red-600">আপনার ঠিকানা is Required</p>
+              )}
             </div>
             <div className="mt-4 ">
               <label className="block text-sm font-bold mb-2">
@@ -99,12 +110,14 @@ const From = ({formatStyle, landing}) => {
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
                 value={userData[0]?.mobile_no}
-                {...register("number", {required: true})}
+                {...register("number", { required: true })}
                 placeholder="আপনার মোবাইল নাম্বার"
                 id="number"
                 autoComplete="number"
               />
-              {errors.number && <p className="text-red-600">মোবাইল নাম্বার is Required</p>}
+              {errors.number && (
+                <p className="text-red-600">মোবাইল নাম্বার is Required</p>
+              )}
             </div>
 
             <div className="mt-4 ">
@@ -115,11 +128,13 @@ const From = ({formatStyle, landing}) => {
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="mail"
                 value={userData[0]?.email_id}
-                {...register("mail", {required: true})}
+                {...register("mail", { required: true })}
                 placeholder="আপনার মেইল"
                 id="number"
               />
-              {errors.number && <p className="text-red-600">মেইল is Required</p>}
+              {errors.number && (
+                <p className="text-red-600">মেইল is Required</p>
+              )}
             </div>
             {/* <div className="mt-4">
               <h4 className="text-xl lg:text-2xl font-semibold">
@@ -181,7 +196,10 @@ const From = ({formatStyle, landing}) => {
           <p className="w-full border border-dotted mt-3"></p>
           <div className="mt-5 flex items-center justify-between px-3 ">
             <div className="flex items-center gap-3">
-              <img className="w-12 h-12" src={`${base_url + landing[0]?.image}`} />
+              <img
+                className="w-12 h-12"
+                src={`${base_url + landing[0]?.image}`}
+              />
               <p>{landing[0]?.item_name}</p>
             </div>
             <p>× {landing[0]?.standard_rate} ৳ </p>
@@ -194,12 +212,30 @@ const From = ({formatStyle, landing}) => {
           <div className="flex items-center justify-between mt-5">
             <p>Shipping</p>
             <div>
-              <label onClick={() => setTotalValue(landing[0]?.standard_rate + 110)} className="flex px-3 py-2 my-3 cursor-pointer items-center">
-                <input type="radio" className=" accent-red-500 size-5" value="110" {...register("delivery")} /> <span className="pl-2">ঢাকার বাহিরে: 110.00৳</span>
+              <label
+                onClick={() => setTotalValue(landing[0]?.standard_rate + 110)}
+                className="flex px-3 py-2 my-3 cursor-pointer items-center"
+              >
+                <input
+                  type="radio"
+                  className=" accent-red-500 size-5"
+                  value="110"
+                  {...register("delivery")}
+                />{" "}
+                <span className="pl-2">ঢাকার বাহিরে: 110.00৳</span>
               </label>
 
-              <label onClick={() => setTotalValue(landing[0]?.standard_rate + 60)} className="flex px-3 py-2 my-3 cursor-pointer items-center">
-                <input type="radio" className=" accent-red-500 size-5" value="60" {...register("delivery")} /> <span className="pl-2">ঢাকার ভিতরে: 60.00৳</span>
+              <label
+                onClick={() => setTotalValue(landing[0]?.standard_rate + 60)}
+                className="flex px-3 py-2 my-3 cursor-pointer items-center"
+              >
+                <input
+                  type="radio"
+                  className=" accent-red-500 size-5"
+                  value="60"
+                  {...register("delivery")}
+                />{" "}
+                <span className="pl-2">ঢাকার ভিতরে: 60.00৳</span>
               </label>
             </div>
           </div>
@@ -217,8 +253,10 @@ const From = ({formatStyle, landing}) => {
           </div>
         </div>
       </section>
-      <div className="text-center">
-        <button className="border border-red-500 p-5" type="submit">
+      <div type="submit" className="text-center font-bold text-white mx-auto max-w-xl py-2 bg-[#F16200] hover:bg-[#cb590c] cursor-pointer">
+        <button
+         
+        >
           Buy Products
         </button>
       </div>

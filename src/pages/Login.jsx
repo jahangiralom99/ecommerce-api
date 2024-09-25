@@ -23,6 +23,7 @@ const Login = () => {
   }, [user]);
 
   const onSubmit = (data) => {
+    console.log(data);
     getUser(data.mail, data.password)
       .then((user) => {
         if (user) {

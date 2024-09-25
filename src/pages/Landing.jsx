@@ -648,7 +648,7 @@ const Item = () => {
                     <h1 className="font-bold text-2xl  ">
                       {formatStyle("custom_text_1")}
                     </h1>
-                    <button className="px-5 text-sm flex items-center gap-3 py-2 bg-[#F16200] text-white font-bold mt-5 rounded">
+                    <button className="px-5 text-sm flex items-center gap-3 py-2 bg-[#F16200] hover:bg-[#cb590c] text-white font-bold mt-5 rounded">
                       অর্ডার করতে ক্লিক করুন <FaRegArrowAltCircleRight />
                     </button>
                   </div>
@@ -756,7 +756,7 @@ const Item = () => {
                           {formatStyle("custom_head_text_8")}
                         </p>
                       </div>
-                      <button className="px-5 text-sm flex items-center gap-3 py-2 bg-[#F16200] text-white font-bold mt-5 rounded">
+                      <button className="px-5 text-sm flex items-center gap-3 py-2 bg-[#F16200] hover:bg-[#cb590c] text-white font-bold mt-5 rounded">
                         অর্ডার করতে ক্লিক করুন <FaRegArrowAltCircleRight />
                       </button>
                     </div>

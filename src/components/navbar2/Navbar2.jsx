@@ -1,7 +1,7 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
 import { GrUserManager } from "react-icons/gr";
-import { IoIosHeartEmpty } from "react-icons/io";
+import { IoIosHeartEmpty, IoIosLogOut } from "react-icons/io";
 import category1 from "../../assets/category1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
@@ -10,6 +10,8 @@ import logo from "../../assets/ad-logo (1).svg";
 import { addToProceed } from "../../utilities/functions";
 import { toast } from "react-toastify";
 import { base_url, fetch_url, header } from "../../utilities/dataPanel";
+import { MdLogout } from "react-icons/md";
+import { FaUserPen } from "react-icons/fa6";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Navbar2 = () => {
     // Clear user session and cart data
     addToProceed(null, "token"); // Remove the token
     addToProceed(null, "cart"); // Remove the cart
-    setUser(null); // Reset the user state
+    setUser(""); // Reset the user state
     setCartItems(0); // Reset cart items count
 
     // Provide user feedback
@@ -54,12 +56,14 @@ const Navbar2 = () => {
     }
   };
 
+  console.log(user)
+
   return (
     <div>
-      <div className="bg-base-100 md:w-full flex justify-center items-center md:pt-10 p-2 px-4">
+      <div className="bg-base-100 max-w-screen-xl mx-auto md:w-full flex  items-center md:pt-10 p-2 px-4">
         <div className="flex-1">
           <Link to="/">
-            <img className="md:w-28 w-20 lg:ml-36" src={logo} alt="logo" />
+            <img className="md:w-28 w-20 " src={logo} alt="logo" />
           </Link>
         </div>
 
@@ -71,7 +75,7 @@ const Navbar2 = () => {
                 type="text"
                 placeholder="Search"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="input input-bordered lg:w-[350px] md:w-[200px] w-24 rounded-none rounded-l-lg bg-[#F5F5F5] md:block hidden"
+                className=" lg:w-[350px] md:w-[200px] w-24 rounded-none  bg-[#F5F5F5] md:block hidden py-2 px-4 border"
               />
             </div>
             {/* Display search results */}
@@ -96,11 +100,11 @@ const Navbar2 = () => {
               )}
             </div>
 
-            <div className="flex justify-center items-center">
-              <button className=" md:bg-black bg-transparent md:border-2 md:btn border-none md:text-white md:rounded-r-md md:rounded-none rounded-none rounded-r-lg md:mr-32">
+            <div className="flex  ">
+              <button className="border py-[10px] px-5 md:mr-32 bg-[#F26734] hover:bg-[#cd3e0a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="h-5 w-5 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -117,57 +121,48 @@ const Navbar2 = () => {
 
             {/* search end */}
 
-            <div className="flex-none">
+            <div className="flex items-center">
               <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle md:mr-20"
-                >
+                <div tabIndex={0} role="button" className="">
                   <div className="flex justify-center items-center gap-5 ">
                     {/* login option */}
                     {user ? (
-                      <>
+                      <div className="md:flex items-center gap-3 hidden">
                         <Link to="/cart">
                           <div className="indicator pr-2">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                              />
-                            </svg>
-
+                            <FaShoppingCart className="text-[22px] hover:text-[#f96331]" />
                             <span className="bg-[#F26734] text-white badge badge-md absolute top-[-12px] md:left-3 left-2">
                               {cartItems}
                             </span>
                           </div>
                         </Link>
-
-                        <Link to="/profile">
-                          <span className="md:hover:bg-[#f96331] hover:text-white hidden  btn md:flex justify-center  rounded-none bg-transparent border-[#f96331]">
-                            {user}
-                          </span>
+                        <Link
+                          data-tip="Profile"
+                          className="lg:tooltip lg:tooltip-bottom hover:text-[#f96331]"
+                          to="/profile"
+                        >
+                          <FaRegUserCircle className="text-2xl" />
                         </Link>
-                        <button
+                        {/* <button
                           onClick={() => logOut()}
                           className="md:hover:bg-[#f96331] hover:text-white hidden  btn md:flex justify-center  rounded-none bg-transparent border-[#f96331]"
                         >
                           Log Out
+                        </button> */}
+                        <button
+                          onClick={() => logOut()}
+                          data-tip="logout"
+                          className="lg:tooltip lg:tooltip-bottom"
+                        >
+                          <MdLogout className="text-2xl hover:text-[#f96331]" />
                         </button>
-                      </>
+                      </div>
                     ) : (
-                      <Link to="/login">
-                        <span className="md:hover:bg-[#f96331] hover:text-white hidden  btn md:flex justify-center  rounded-none bg-transparent border-[#f96331]">
-                          Login
-                        </span>
+                      <Link
+                        className="border p-2 rounded-full hover:text-[#f96331]"
+                        to="/login"
+                      >
+                        <FaUserPen className="text-2xl" />
                       </Link>
                     )}
                   </div>
@@ -175,17 +170,17 @@ const Navbar2 = () => {
               </div>
             </div>
 
-            <div className="flex justify-center items-center gap-2">
-              <div className="md:hidden">
+            <div className="flex justify-center items-center gap-3">
+              {/* <div className="md:hidden">
                 <IoIosHeartEmpty className="text-xl" />
-              </div>
+              </div> */}
               {user ? (
                 <div
                   onClick={() => logOut()}
                   data-tip="logout"
                   className="md:hidden cursor-pointer tooltip tooltip-bottom"
                 >
-                  <GrUserManager className="text-xl" />
+                  <GrUserManager className="text-xl " />
                 </div>
               ) : (
                 <Link to="/login">

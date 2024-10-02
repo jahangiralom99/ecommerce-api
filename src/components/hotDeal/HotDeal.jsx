@@ -18,7 +18,7 @@ const HotDeal = (props) => {
   };
 
   return (
-    <div className=" my-10 md:bg-[#F5F5F5] pb-2 border-t-2 md:border-none border-blue-300">
+    <div className="max-w-screen-xl mx-auto px-4 my-10 md:bg-[#F5F5F5] pb-2 border-t-2 md:border-none border-blue-300">
       <div className=" mx-auto">
         <div className="flex justify-between items-center px-2 pb-1 md:pb-0">
           <div className="">
@@ -42,12 +42,9 @@ const HotDeal = (props) => {
         <Tabs
           selectedIndex={tabIndex}
           onSelect={(index) => setTabIndex(index)}
-          className=" "
+          className=""
         >
-          <TabList
-            role="tablist"
-            className="flex justify-center gap-1 py-2 flex-wrap "
-          >
+          <TabList role="tablist" className="flex gap-1 py-2 flex-wrap ">
             {grpData
               .filter((filter) => filter.is_group == 0)
               .slice(0, 8)
@@ -55,7 +52,7 @@ const HotDeal = (props) => {
                 <Tab
                   key={index}
                   role="tab"
-                  className="tabs-bordered flex justify-center px-3 py-1  md:text-sm  text-xs border  bg-[#FF8C00] rounded-md text-white focus:outline-none focus:ring focus:ring-violet-300"
+                  className="tabs-bordered cursor-pointer flex justify-center px-3 py-1  md:text-sm  text-xs border bg-[#FF8C00] rounded-md text-white focus:outline-none  "
                 >
                   {grp.name}
                 </Tab>
@@ -64,38 +61,36 @@ const HotDeal = (props) => {
 
           {grpData
             .filter((filter) => filter.is_group == 0)
-            .slice(0, 10)
+            .slice(1, 10)
             .map((grp, index) => (
               <TabPanel key={index} className="bg-transparent md:my-5 my-2 ">
-                <div className="flex justify-center items-center">
-                  <div className="grid xl:grid-col-8 grid-cols-2 md:grid-cols-4 gap-2">
-                    {webItmData
-                      .filter((item) => item.item_group === grp.name)
-                      .slice(0, 10)
-                      .map((itm, index) => (
-                        <Link key={index} to={`/item/${itm?.item_code}`}>
-                          <div className="border-2 hover:shadow-lg md:h-full bg-white">
-                            <img
-                              className="md:w-48 md:h-40 w-full h-full"
-                              src={`${base_url + itm?.thumbnail}`}
-                              alt=""
-                            />
-                            <div className="flex justify-center items-center md:flex-col md:text-sm text-[15px]">
-                              <p className="flex justify-start items-center gap-1 md:pl-2">
-                                <FaBangladeshiTakaSign className="hidden md:block" />
-                                <p className="font-bold">
-                                  {rate(itm?.item_code)}
-                                </p>
+                <div className="grid xl:grid-col-8 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                  {webItmData
+                    .filter((item) => item.item_group === grp.name)
+                    .slice(0, 10)
+                    .map((itm, index) => (
+                      <Link key={index} to={`/item/${itm?.item_code}`}>
+                        <div className="flex flex-col items-center justify-center border-2 hover:shadow-lg md:h-full bg-white">
+                          <img
+                            className="md:w-48 md:h-40 w-full h-full"
+                            src={`${base_url + itm?.thumbnail}`}
+                            alt=""
+                          />
+                          <div className="flex justify-center items-center md:flex-col md:text-sm text-[15px]">
+                            <p className="flex justify-start items-center gap-1 md:pl-2">
+                              <FaBangladeshiTakaSign className="hidden md:block" />
+                              <p className="font-bold">
+                                {rate(itm?.item_code)}
                               </p>
-                              <del className="flex items-center md:opacity-30 opacity-80 md:-mt-2 pl-1">
-                                <FaBangladeshiTakaSign className="opacity-70 hidden md:block" />
-                                <p className="">{rate(itm?.item_code)}</p>
-                              </del>
-                            </div>
+                            </p>
+                            <del className="flex items-center md:opacity-30 opacity-80 md:-mt-2 pl-1">
+                              <FaBangladeshiTakaSign className="opacity-70 hidden md:block" />
+                              <p className="">{rate(itm?.item_code)}</p>
+                            </del>
                           </div>
-                        </Link>
-                      ))}
-                  </div>
+                        </div>
+                      </Link>
+                    ))}
                 </div>
               </TabPanel>
             ))}

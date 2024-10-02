@@ -5,13 +5,14 @@ import { IoIosHeartEmpty, IoIosLogOut } from "react-icons/io";
 import category1 from "../../assets/category1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { CartContext, UserContext } from "../../App";
+import { CartContext, GroupsContext, UserContext } from "../../App";
 import logo from "../../assets/ad-logo (1).svg";
 import { addToProceed } from "../../utilities/functions";
 import { toast } from "react-toastify";
 import { base_url, fetch_url, header } from "../../utilities/dataPanel";
 import { MdLogout } from "react-icons/md";
 import { FaUserPen } from "react-icons/fa6";
+import { CiLogout } from "react-icons/ci";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Navbar2 = () => {
   const { setCartItems } = useContext(CartContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const grpData = useContext(GroupsContext);
 
   const logOut = () => {
     // Clear user session and cart data
@@ -56,8 +58,6 @@ const Navbar2 = () => {
     }
   };
 
-  console.log(user)
-
   return (
     <div>
       <div className="bg-base-100 max-w-screen-xl mx-auto md:w-full flex  items-center md:pt-10 p-2 px-4">
@@ -69,19 +69,19 @@ const Navbar2 = () => {
 
         {/* search start */}
         <div className="flex justify-center items-center relative">
-          <div className="navbar-end flex justify-center pt-2">
+          <div className="navbar-end flex justify-center gap-4 pt-2">
             <div onChange={handleSearch} className="form-control">
               <input
                 type="text"
                 placeholder="Search"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className=" lg:w-[350px] md:w-[200px] w-24 rounded-none  bg-[#F5F5F5] md:block hidden py-2 px-4 border"
+                className=" lg:w-[350px] md:w-[200px] w-32 rounded-none  bg-[#F5F5F5] md:block  py-[5px] md:py-2 px-4 border"
               />
             </div>
             {/* Display search results */}
             <div className="bg-white absolute overflow-y-scroll top-14 z-50 left-0">
               {searchResult.length > 0 && searchQuery && (
-                <ul className="h-44 w-96">
+                <ul className="h-44 md:w-96">
                   {searchResult.map((item, index) => (
                     <Link
                       to={`/item/${item?.item_code}`}
@@ -100,7 +100,7 @@ const Navbar2 = () => {
               )}
             </div>
 
-            <div className="flex  ">
+            <div className="md:flex hidden">
               <button className="border py-[10px] px-5 md:mr-32 bg-[#F26734] hover:bg-[#cd3e0a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +170,7 @@ const Navbar2 = () => {
               </div>
             </div>
 
-            <div className="flex justify-center items-center gap-3">
+            <div className="flex  justify-center items-center gap-3">
               {/* <div className="md:hidden">
                 <IoIosHeartEmpty className="text-xl" />
               </div> */}
@@ -178,17 +178,11 @@ const Navbar2 = () => {
                 <div
                   onClick={() => logOut()}
                   data-tip="logout"
-                  className="md:hidden cursor-pointer tooltip tooltip-bottom"
+                  className="md:hidden hover:text-[#F05A2D] cursor-pointer tooltip tooltip-bottom"
                 >
-                  <GrUserManager className="text-xl " />
+                  <CiLogout className="text-xl " />
                 </div>
-              ) : (
-                <Link to="/login">
-                  <span className="md:hover:bg-[#f96331] btn justify-center  rounded-none bg-transparent md:hidden border-[#f96331]">
-                    Login
-                  </span>
-                </Link>
-              )}
+              ) : null}
               {/*mobile  drawer */}
               <div className="drawer md:hidden">
                 <input
@@ -212,7 +206,7 @@ const Navbar2 = () => {
                   ></label>
                   <ul className="menu  w-64  min-h-full bg-white text-base-content">
                     {/* Sidebar content here */}
-                    <div className="fixed">
+                    {/* <div className="fixed">
                       <ul className="text-lg">
                         <li>
                           <a>Home</a>
@@ -230,397 +224,93 @@ const Navbar2 = () => {
                           <a>Replacement Policy</a>
                         </li>
                       </ul>
-                    </div>
-                    <div className="fixed left-0 w-full bg-[#F05A2D] text-white mt-60 text-center text-xl p-2 ">
+                    </div> */}
+                    <div className="fixed top-0 left-0 w-full bg-[#F05A2D] text-white text-center text-xl p-2 ">
                       Category
                     </div>
 
-                    <div className="pt-72">
+                    <div className="pt-12">
                       <ul className="flex flex-col gap-4">
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
+                        {grpData
+                          .filter((main) => main.is_group == 0)
+                          ?.slice(0, 10)
+                          .map((item, idx) => {
+                            return (
+                              <div
+                                key={item.id}
+                                className="group relative cursor-pointer"
                               >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
+                                <Link to={`/category/${idx}`} className="flex justify-between items-center">
+                                  <div className="flex justify-center items-center gap-3">
+                                    <a href="#">
+                                      <img
+                                        className="w-7"
+                                        src={`${base_url + base_url}`}
+                                        alt=""
+                                      />
+                                    </a>
+                                    <a
+                                      href="#"
+                                      className="text-sm hover:text-[#F15B2D]"
+                                    >
+                                      {item?.name}
+                                    </a>
+                                  </div>
+                                  <a href="#">
+                                    <FaChevronDown className="text-blue-500 text-sm " />
+                                  </a>
+                                </Link>
+                                <hr />
 
-                          {/* sub category start */}
+                                {/* sub category start */}
 
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
-                              >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
+                                {/* <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
+                                  <Link
+                                    to="/category"
+                                    onClick={() =>
+                                      (document.getElementById(
+                                        "my-drawer"
+                                      ).checked = false)
+                                    }
+                                  >
+                                    <li className="mb-2 hover:text-[#F15B2D]">
+                                      sub1
+                                      <hr />
+                                    </li>
+                                  </Link>
+                                  <Link
+                                    to="/category"
+                                    onClick={() =>
+                                      (document.getElementById(
+                                        "my-drawer"
+                                      ).checked = false)
+                                    }
+                                  >
+                                    <li className="mb-2 hover:text-[#F15B2D]">
+                                      sub1
+                                      <hr />
+                                    </li>
+                                  </Link>
+                                  <Link
+                                    to="/category"
+                                    onClick={() =>
+                                      (document.getElementById(
+                                        "my-drawer"
+                                      ).checked = false)
+                                    }
+                                  >
+                                    <li className="mb-2 hover:text-[#F15B2D]">
+                                      sub1
+                                      <hr />
+                                    </li>
+                                  </Link>
+                                </ul> */}
+                                {/* sub category end */}
+                              </div>
+                            );
+                          })}
 
-                          {/* sub category start */}
-
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
-                              >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
-
-                          {/* sub category start */}
-
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
-                              >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
-
-                          {/* sub category start */}
-
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
-                              >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
-
-                          {/* sub category start */}
-
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
-                        <div className="group relative cursor-pointer">
-                          <div className="flex justify-between items-center">
-                            <div className="flex justify-center items-center gap-3">
-                              <a href="#">
-                                <img className="w-7" src={category1} alt="" />
-                              </a>
-                              <a
-                                href="#"
-                                className="text-sm hover:text-[#F15B2D]"
-                              >
-                                ছেলেদের ফ্যাশন
-                              </a>
-                            </div>
-                            <a href="#">
-                              <FaChevronDown className="text-blue-500 text-sm " />
-                            </a>
-                          </div>
-                          <hr />
-
-                          {/* sub category start */}
-
-                          <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                            <Link
-                              to="/category"
-                              onClick={() =>
-                                (document.getElementById(
-                                  "my-drawer"
-                                ).checked = false)
-                              }
-                            >
-                              <li className="mb-2 hover:text-[#F15B2D]">
-                                sub1
-                                <hr />
-                              </li>
-                            </Link>
-                          </ul>
-                          {/* sub category end */}
-                        </div>
+                      
                       </ul>
                     </div>
                   </ul>

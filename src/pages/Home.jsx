@@ -36,7 +36,7 @@ const HomeMain = () => {
             <Consumable
               key={idx}
               grp={grp.name}
-              idx={idx}
+              idx={idx} 
               itemData={itemData}
             />
           ))}

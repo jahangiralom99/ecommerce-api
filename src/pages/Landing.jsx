@@ -415,7 +415,7 @@ const Item = () => {
                 </div>
                 {/* common button */}
                 <div className="mt-12 text-center">
-                  <button className="bg-[#BB2121] md:text-3xl font-bold px-6 py-4 shadow-xl rounded-lg text-white border-2 border-white hover:bg-[#2c6036] hover:scale-95 transition duration-200">
+                  <button className="bg-[#BB2121] md:text-xl font-bold px-6 py-1 shadow-xl rounded-lg text-white border-2 border-white  hover:bg-[#a00909] hover:scale-95 transition duration-200">
                     অর্ডার করতে চাই
                   </button>
                 </div>
@@ -497,9 +497,9 @@ const Item = () => {
                     </Swiper>
                     {/* button  */}
                     <div className="mt-12 text-center">
-                      <button className="bg-[#BB2121] md:text-3xl font-bold px-6 py-4 shadow-xl rounded-lg text-white border-2 border-white hover:bg-[#2c6036] hover:scale-95 transition duration-200">
-                        অর্ডার করতে চাই
-                      </button>
+                    <button className="bg-[#BB2121] md:text-xl font-bold px-6 py-1 shadow-xl rounded-lg text-white border-2 border-white  hover:bg-[#a00909] hover:scale-95 transition duration-200">
+                    অর্ডার করতে চাই
+                  </button>
                     </div>
                   </div>
                 </div>

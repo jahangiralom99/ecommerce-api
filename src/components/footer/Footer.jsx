@@ -16,7 +16,7 @@ import {
 
 const Footer = () => {
   return (
-    <div className="hidden md:block">
+    <div className="hidden md:block mt-3">
       <footer className="footer place-items-center md:p-10 pt-5 bg-[#404040] text-white">
         <nav className="flex flex-col gap-10">
           {/* <img className="w-12" src={logo} alt="" /> */}

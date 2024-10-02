@@ -16,11 +16,11 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
   const [hide, setHide] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      return navigate("/");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     return navigate("/");
+  //   }
+  // }, [user]);
 
   const onSubmit = (data) => {
     console.log(data);

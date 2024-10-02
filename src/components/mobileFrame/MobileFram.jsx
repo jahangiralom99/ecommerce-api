@@ -17,8 +17,8 @@ import {Scrollbar} from "swiper/modules";
 
 const MobileFram = () => {
   return (
-    <div className="bg-stone-300 py-3 px-2">
-      <div className="md:hidden block ">
+    <div className="bg-stone-300 md:hidden block py-3 px-2">
+      <div className=" ">
         <Swiper
           slidesPerView={4}
           centeredSlides={false}

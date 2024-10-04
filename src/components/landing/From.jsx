@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatDate, postData } from "../../utilities/functions";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ const From = ({ formatStyle, landing }) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserContext);
   const [totalValue, setTotalValue] = useState(0);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [order, setOrder] = useState("");
 
   // const getPhoneNumber = (number) => {
@@ -24,7 +24,7 @@ const From = ({ formatStyle, landing }) => {
   //       return response.json();
   //     })
   //     .then((result) => {
-  //       // console.log(result[0]);
+  //       console.log(result);
   //       if (result) {
   //         return result;
   //       } else {
@@ -39,6 +39,12 @@ const From = ({ formatStyle, landing }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  // handle on change mobile devices
+  // const handleOnChange = (e) => {
+  //   console.log(e.target.value);
+  //   getPhoneNumber(e.target.value);
+  // };
 
   const onSubmit = (data) => {
     console.log(data);
@@ -244,12 +250,16 @@ const From = ({ formatStyle, landing }) => {
                 মোবাইল নাম্বার <span className="text-red-500">*</span>
               </label>
               <input
+                // onChange={handleOnChange}
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
-                type="text"
+                type="number"
                 value={userData[0]?.mobile_no}
-                {...register("number", { required: true })}
+                {...register("number", {
+                  required: true,
+                })}
                 placeholder="আপনার মোবাইল নাম্বার"
                 id="number"
+                required
                 autoComplete="number"
               />
               {errors.number && (
@@ -263,7 +273,7 @@ const From = ({ formatStyle, landing }) => {
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="mail"
                 value={userData[0]?.email_id}
-                {...register("mail", { required: false })}
+                {...register("mail")}
                 placeholder="আপনার মেইল"
                 id="number"
               />
@@ -395,7 +405,7 @@ const From = ({ formatStyle, landing }) => {
         ) : (
           <button
             disabled
-            className={`py-2  px-24 rounded bg-gray-300 cursor-not-allowed`}
+            className={`py-2  px-24 rounded bg-green-500 cursor-not-allowed`}
           >
             {!order ? "Order Now" : `${order}`}
           </button>

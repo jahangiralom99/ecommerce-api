@@ -115,7 +115,7 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItmData.map((data, idx) => (
+                    {cartItmData?.map((data, idx) => (
                       <tr
                         key={idx}
                         className="border-b border-blue-gray-50 text-center"

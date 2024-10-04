@@ -10,6 +10,29 @@ const From = ({ formatStyle, landing }) => {
   const navigate = useNavigate();
   const { userData } = useContext(UserContext);
   const [totalValue, setTotalValue] = useState(0);
+  const { user, setUser } = useContext(UserContext);
+  const [order, setOrder] = useState("");
+
+  // const getPhoneNumber = (number) => {
+  //   return fetch(
+  //     `${fetch_url}/gets/Customer?filters=[["mobile_no", "=", "${number}"]]&fields=["*"]`,
+  //     {
+  //       headers: header,
+  //     }
+  //   )
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((result) => {
+  //       // console.log(result[0]);
+  //       if (result) {
+  //         return result;
+  //       } else {
+  //         console.log(false);
+  //         return false;
+  //       }
+  //     });
+  // };
 
   const {
     register,
@@ -17,37 +40,151 @@ const From = ({ formatStyle, landing }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    let customerOrder = {
-      customer: userData[0]?.name,
-      transaction_date: formatDate(),
-      custom_delivery_type: "",
-      total_taxes_and_charges: totalValue,
-      items: [
-        {
-          item_code: landing[0]?.item_code,
-          item_name: landing[0]?.item_name,
-          qty: 1,
-          rate: landing[0]?.standard_rate,
-          amount: landing[0]?.standard_rate,
-          uom: landing[0]?.stock_uom,
-          delivery_date: formatDate(),
-        },
-      ],
-    };
+  const onSubmit = (data) => {
+    console.log(data);
+    if (user) {
+      let customerOrder = {
+        customer: userData?.[0]?.name || "default_name",
+        transaction_date: formatDate(),
+        custom_delivery_type: "",
+        total_taxes_and_charges: totalValue || 0,
+        items: landing?.[0]
+          ? [
+              // check if landing exists
+              {
+                item_code: landing[0]?.item_code || "default_code",
+                item_name: landing[0]?.item_name || "default_name",
+                qty: 1,
+                rate: landing[0]?.standard_rate || 0,
+                amount: landing[0]?.standard_rate || 0,
+                uom: landing[0]?.stock_uom || "default_uom",
+                delivery_date: formatDate(),
+              },
+            ]
+          : [],
+      };
+      postData("Sales Order", customerOrder)
+        .then((isUser) => {
+          if (isUser) {
+            toast("Order is Created");
+            navigate("/");
+          } else {
+            console.log("Order is Not Created");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user:", error);
+        });
+    } else {
+      let newCustomer = {
+        customer_name: data.name,
+        customer_type: "Individual",
+        email_id: data.mail,
+        mobile_no: data.number,
+        primary_address: data.address,
+      };
+      // toast("Order is Created successfully!");
+      setOrder("Order is Created successfully!");
+      postData("Customer", newCustomer)
+        .then((isUser) => {
+          if (isUser) {
+            let customerOrder = {
+              customer: isUser || "default_name",
+              transaction_date: formatDate(),
+              custom_delivery_type: "",
+              total_taxes_and_charges: totalValue || 0,
+              items: landing?.[0]
+                ? [
+                    // check if landing exists
+                    {
+                      item_code: landing[0]?.item_code || "default_code",
+                      item_name: landing[0]?.item_name || "default_name",
+                      qty: 1,
+                      rate: landing[0]?.standard_rate || 0,
+                      amount: landing[0]?.standard_rate || 0,
+                      uom: landing[0]?.stock_uom || "default_uom",
+                      delivery_date: formatDate(),
+                    },
+                  ]
+                : [],
+            };
+            postData("Sales Order", customerOrder)
+              .then((isUser) => {
+                if (isUser) {
+                  // toast("Order is Created");
+                  navigate("/");
+                } else {
+                  console.log("Order is Not Created");
+                  toast("Order is Not Created");
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching user:", error);
+              });
+          } else {
+            console.log("User is Not Created");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user:", error);
+        });
+      // getPhoneNumber(data.number).then((number) => {
+      //   console.log(number[0], data.number);
+      //   if (number[0]?.mobile_no == data.number) {
+      //     // alert("dfsdsfds");
+      //     let newCustomer = {
+      //       customer_name: number[0]?.name,
+      //       customer_type: "Individual",
+      //       mobile_no: number[0]?.mobile_no,
+      //       primary_address: number[0]?.primary_address,
+      //     };
+      //     postData("Customer", newCustomer)
+      //       .then((isUser) => {
+      //         if (isUser) {
+      //           let customerOrder = {
+      //             customer: isUser || "default_name",
+      //             transaction_date: formatDate(),
+      //             custom_delivery_type: "",
+      //             total_taxes_and_charges: totalValue || 0,
+      //             items: landing?.[0]
+      //               ? [
+      //                   // check if landing exists
+      //                   {
+      //                     item_code: landing[0]?.item_code || "default_code",
+      //                     item_name: landing[0]?.item_name || "default_name",
+      //                     qty: 1,
+      //                     rate: landing[0]?.standard_rate || 0,
+      //                     amount: landing[0]?.standard_rate || 0,
+      //                     uom: landing[0]?.stock_uom || "default_uom",
+      //                     delivery_date: formatDate(),
+      //                   },
+      //                 ]
+      //               : [],
+      //           };
+      //           postData("Sales Order", customerOrder)
+      //             .then((isUser) => {
+      //               if (isUser) {
+      //                 toast("Order is Created");
+      //                 navigate("/");
+      //               } else {
+      //                 console.log("Order is Not Created");
+      //               }
+      //             })
+      //             .catch((error) => {
+      //               console.error("Error fetching user:", error);
+      //             });
+      //         } else {
+      //           console.log("User is Not Created");
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         console.error("Error fetching user:", error);
+      //       });
+      //   } else {
 
-    postData("Sales Order", customerOrder)
-      .then((isUser) => {
-        if (isUser) {
-          toast("Order is Created");
-          navigate("/");
-        } else {
-          console.log("Order is Not Created");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-      });
+      //   }
+      // });
+    }
   };
 
   return (
@@ -121,21 +258,17 @@ const From = ({ formatStyle, landing }) => {
             </div>
 
             <div className="mt-4 ">
-              <label className="block text-sm font-bold mb-2">
-                মেইল <span className="text-red-500">*</span>
-              </label>
+              <label className="block text-sm font-bold mb-2">মেইল</label>
               <input
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="mail"
                 value={userData[0]?.email_id}
-                {...register("mail", { required: true })}
+                {...register("mail", { required: false })}
                 placeholder="আপনার মেইল"
                 id="number"
               />
-              {errors.number && (
-                <p className="text-red-600">মেইল is Required</p>
-              )}
             </div>
+
             {/* <div className="mt-4">
               <h4 className="text-xl lg:text-2xl font-semibold">
                 Country / Region <span className="text-red-500">*</span>
@@ -206,7 +339,7 @@ const From = ({ formatStyle, landing }) => {
           </div>
           <p className="w-full border border-dotted mt-3"></p>
           <div className="mt-5 flex items-center justify-between px-3">
-            <h1>Subtoal </h1>
+            <h1>Sub Total </h1>
             <p> {landing[0]?.standard_rate} ৳ </p>
           </div>
           <div className="flex items-center justify-between mt-5">
@@ -224,7 +357,6 @@ const From = ({ formatStyle, landing }) => {
                 />{" "}
                 <span className="pl-2">ঢাকার বাহিরে: 110.00৳</span>
               </label>
-
               <label
                 onClick={() => setTotalValue(landing[0]?.standard_rate + 60)}
                 className="flex px-3 py-2 my-3 cursor-pointer items-center"
@@ -248,17 +380,26 @@ const From = ({ formatStyle, landing }) => {
             <h1>ক্যাশঅন ডেলিভারি</h1>
             <p className="mt-2">হাতে পন্য পেয়ে পেমেন্ট করুন</p>
           </div>
-          <div>
-            <button></button>
-          </div>
         </div>
       </section>
-      <div type="submit" className="text-center font-bold text-white mx-auto max-w-xl py-2 bg-[#F16200] hover:bg-[#cb590c] cursor-pointer">
-        <button
-         
-        >
-          Buy Products
-        </button>
+      <div className="text-center  mx-auto max-w-xl font-bold text-white  cursor-pointer">
+        {!order ? (
+          <button
+            type="submit"
+            className={`py-2 ${
+              !order ? " bg-[#F16200] hover:bg-[#cb590c]" : " bg-green-500"
+            }  px-24 rounded`}
+          >
+            {!order ? "Order Now" : `${order}`}
+          </button>
+        ) : (
+          <button
+            disabled
+            className={`py-2  px-24 rounded bg-gray-300 cursor-not-allowed`}
+          >
+            {!order ? "Order Now" : `${order}`}
+          </button>
+        )}
       </div>
     </form>
   );

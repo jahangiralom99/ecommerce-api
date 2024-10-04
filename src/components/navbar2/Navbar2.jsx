@@ -240,7 +240,10 @@ const Navbar2 = () => {
                                 key={item.id}
                                 className="group relative cursor-pointer"
                               >
-                                <Link to={`/category/${idx}`} className="flex justify-between items-center">
+                                <Link
+                                  to={`/category/${idx}`}
+                                  className="flex justify-between items-center"
+                                >
                                   <div className="flex justify-center items-center gap-3">
                                     <a href="#">
                                       <img
@@ -309,8 +312,6 @@ const Navbar2 = () => {
                               </div>
                             );
                           })}
-
-                      
                       </ul>
                     </div>
                   </ul>

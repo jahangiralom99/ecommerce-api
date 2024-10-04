@@ -165,21 +165,26 @@ const Product = () => {
                   </button>
                 </div>
               </div> */}
-              <div className="flex gap-2 items-center">
-                {["M", "XXL", "L", "XL"].map((size) => (
-                  <button
-                    key={size}
-                    className={`py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ${
-                      activeSize === size
-                        ? "bg-[#f36f21] text-white"
-                        : "border-[#f36f21] text-[#f36f21]"
-                    }`}
-                    onClick={() => handleClick(size)}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
+              {/* size  */}
+              <div className="flex gap-20 mt-5">
+                <h1 className="text-[#757575]">Size</h1>
+                <div className="flex gap-2 items-center">
+                  {["M", "XXL", "L", "XL"].map((size) => (
+                    <button
+                      key={size}
+                      className={`py-1 px-1 md:px-4 text-xs md:text-[14px] border mt-1 ${
+                        activeSize === size
+                          ? "bg-[#f36f21] text-white"
+                          : "border-[#f36f21] text-[#f36f21]"
+                      }`}
+                      onClick={() => handleClick(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+                </div>
+                {/* count  */}
               <div className="flex gap-12 mt-8">
                 <h1 className="text-[#757575]">Quantity</h1>
                 <div className="flex items-center cursor-pointer">

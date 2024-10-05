@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import Navbar2 from "./components/navbar2/Navbar2";
@@ -26,8 +26,19 @@ const App = () => {
 
   useEffect(() => {
     let token = getStrdCart("token");
+    console.log("Token after clearing:", token);
+  
+    if (!token) {
+      setUser("");
+      setCartItems(0);
+      setUserData([]);
+      return;
+    }
+    
     let parts = atob(decodeURIComponent(token)).split("_");
-
+  
+    console.log(parts, token);
+  
     getUser(parts[0], parts[1])
       .then((user) => {
         if (user) {
@@ -42,7 +53,8 @@ const App = () => {
       .catch((error) => {
         console.error("Error fetching user:", error);
       });
-  }, [user]);
+  }, []);
+  
 
   return (
     <div>

@@ -111,25 +111,6 @@ const getUser = (mail, pass) => {
     });
 };
 
-// const getPhoneNumber = (number) => {
-//   return fetch(
-//     `${fetch_url}/gets/Customer?filters=[["mobile_no", "=", "${number}"]]&fields=["*"]`,
-//     {
-//       headers: header,
-//     }
-//   )
-//     .then((response) => {
-//       return response.json();
-//     })
-//     .then((result) => {
-//       console.log(result);
-//       if (result) {
-//         return result[0];
-//       } else {
-//         return false;
-//       }
-//     });
-// };
 
 
 const postData = (docType, body) => {

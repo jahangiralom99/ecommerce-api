@@ -48,7 +48,7 @@ const Login = () => {
 
   return (
     <>
-      <Title title="Registration" />
+      <Title title="Login" />
       <div className="max-w-3xl mx-auto px-4 mt-4 py-5">
         <form
           onSubmit={handleSubmit(onSubmit)}

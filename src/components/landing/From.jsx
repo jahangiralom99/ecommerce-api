@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatDate, postData } from "../../utilities/functions";
 import { toast } from "react-toastify";
@@ -268,15 +268,26 @@ const From = ({ formatStyle, landing }) => {
             </div>
 
             <div className="mt-4 ">
-              <label className="block text-sm font-bold mb-2">মেইল</label>
+              <label className="block text-sm font-bold mb-2">
+                মেইল <span className="text-[13px] font-normal">(Optional)</span>
+              </label>
               <input
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="mail"
                 value={userData[0]?.email_id}
-                {...register("mail")}
+                {...register("mail", {
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for valid email
+                    message: "সঠিক মেইল এড্রেস দিন", // Error message for invalid email
+                  },
+                })}
                 placeholder="আপনার মেইল"
                 id="number"
               />
+              {errors.mail && (
+                <p className="text-red-500 text-sm">{errors.mail.message}</p>
+              )}{" "}
+              {/* Display error */}
             </div>
 
             {/* <div className="mt-4">

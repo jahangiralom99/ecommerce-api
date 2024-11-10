@@ -7,6 +7,7 @@ import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
 
 const Banner = ({ grpData }) => {
+
   return (
     <div className="flex relative m-0 p-0">
       <div className="bg-[#576BB2] h-80 lg:w-32 xl:block hidden mt-3"></div>
@@ -14,10 +15,10 @@ const Banner = ({ grpData }) => {
         <div className="hidden md:block bg-white mx-auto h-80 w-60 pt-2 border-b-2 lg:flex">
           <div className="bg-[#576BB2] h-80 lg:w-8 lg:-mt-2 xl:hidden lg:block hidden "></div>
           <ul className="w-60">
-            {grpData
-              .filter((main) => main.is_group == 0)
-              .slice(0, 10)
-              .map((grp, idx) => (
+            {grpData?.data
+              ?.filter((main) => main.is_group == 0)
+              ?.slice(0, 10)
+              ?.map((grp, idx) => (
                 <Link to={`/category/${idx}`} key={idx}>
                   <li className="py-[1px] flex justify-between items-center px-2">
                     <a href="#">{grp.name}</a>

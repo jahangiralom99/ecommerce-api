@@ -53,7 +53,7 @@ const putCartDB = async (user, item) => {
 };
 
 const addToProceed = (newItem, store) => {
-  localStorage.removeItem(`${window.location.hostname}-${store}`);
+  // localStorage.removeItem(`${window.location.hostname}-${store}`);
   localStorage.setItem(
     `${window.location.hostname}-${store}`,
     JSON.stringify(newItem)
@@ -110,8 +110,6 @@ const getUser = (mail, pass) => {
       }
     });
 };
-
-
 
 const postData = (docType, body) => {
   return fetch(`${fetch_url}/posts/${docType}`, {

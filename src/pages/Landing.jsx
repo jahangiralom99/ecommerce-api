@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ItemContext } from "../App";
 import {
   FaCheck,
   FaRegArrowAltCircleRight,
@@ -19,6 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import check from "../assets/check.webp";
 // import required modules
 import { FreeMode, Pagination } from "swiper/modules";
+import { ItemContext } from "../App";
 
 const Item = () => {
   const { name } = useParams();
@@ -26,8 +26,12 @@ const Item = () => {
   const [loader, setLoader] = useState(true);
   const [landing, setLanding] = useState([]);
 
+
+  console.log(itemData, name);
+
   useEffect(() => {
-    let itmFind = itemData.find((item) => item.name === name);
+    let itmFind = itemData?.data?.find((item) => item.name === name);
+    // console.log(itmFind);
     setLanding([itmFind]);
     setLoader(false);
   }, [name, itemData]);

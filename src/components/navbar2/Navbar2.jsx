@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { CartContext, GroupsContext, UserContext } from "../../App";
 import logo from "../../assets/ad-logo (1).svg";
-import { addToProceed } from "../../utilities/functions";
+import { addToProceed, getStrdCart } from "../../utilities/functions";
 import { toast } from "react-toastify";
 import { base_url, fetch_url, header } from "../../utilities/dataPanel";
 import { MdLogout } from "react-icons/md";
@@ -16,47 +16,49 @@ import { CiLogout } from "react-icons/ci";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
-  const { cartItems } = useContext(CartContext);
-  const { user, setUser } = useContext(UserContext);
-  const { setCartItems } = useContext(CartContext);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const grpData = useContext(GroupsContext);
+  const { data } = getStrdCart("login-info");
+  const [user, setUser] = "";
+  // const { cartItems } = useContext(CartContext);
+  // const { user, setUser } = useContext(UserContext);
+  // const { setCartItems } = useContext(CartContext);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [searchResult, setSearchResult] = useState([]);
+  // const grpData = useContext(GroupsContext);
 
-  const logOut = () => {
-    // Clear user session and cart data
-    addToProceed(null, "token"); // Remove the token
-    addToProceed(null, "cart"); // Remove the cart
-    setUser(""); // Reset the user state
-    setCartItems(0); // Reset cart items count
+  // const logOut = () => {
+  //   // Clear user session and cart data
+  //   addToProceed(null, "token"); // Remove the token
+  //   addToProceed(null, "cart"); // Remove the cart
+  //   setUser(""); // Reset the user state
+  //   setCartItems(0); // Reset cart items count
 
-    // Provide user feedback
-    toast("Logged out successfully");
+  //   // Provide user feedback
+  //   toast("Logged out successfully");
 
-    // Redirect to the login page or home page
-    navigate("/login");
-  };
+  //   // Redirect to the login page or home page
+  //   navigate("/login");
+  // };
 
   // handle Search btn
-  const handleSearch = async () => {
-    const query = encodeURIComponent(
-      `[["item_name", "like", "%${searchQuery}%"]]`
-    );
-    const url = `${fetch_url}/gets/Item?filters=${query}&fields=["*"]`;
+  // const handleSearch = async () => {
+  //   const query = encodeURIComponent(
+  //     `[["item_name", "like", "%${searchQuery}%"]]`
+  //   );
+  //   const url = `${fetch_url}/gets/Item?filters=${query}&fields=["*"]`;
 
-    try {
-      const groupsData = await fetch(url, {
-        method: "GET",
-        headers: header,
-      });
+  //   try {
+  //     const groupsData = await fetch(url, {
+  //       method: "GET",
+  //       headers: header,
+  //     });
 
-      const data = await groupsData.json();
-      console.log(data);
-      setSearchResult(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //     const data = await groupsData.json();
+  //     console.log(data);
+  //     setSearchResult(data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
   return (
     <div>
@@ -70,17 +72,17 @@ const Navbar2 = () => {
         {/* search start */}
         <div className="flex justify-center items-center relative">
           <div className="navbar-end flex justify-center gap-4 pt-2">
-            <div onChange={handleSearch} className="form-control">
+            <div className="form-control">
               <input
                 type="text"
                 placeholder="Search"
-                onChange={(e) => setSearchQuery(e.target.value)}
+                // onChange={(e) => setSearchQuery(e.target.value)}
                 className=" lg:w-[350px] md:w-[200px] w-32 rounded-none  bg-[#F5F5F5] md:block  py-[5px] md:py-2 px-4 border"
               />
             </div>
             {/* Display search results */}
             <div className="bg-white absolute overflow-y-scroll top-14 z-50 left-0">
-              {searchResult.length > 0 && searchQuery && (
+              {/* {searchResult.length > 0 && searchQuery && (
                 <ul className="h-44 md:w-96">
                   {searchResult.map((item, index) => (
                     <Link
@@ -97,7 +99,7 @@ const Navbar2 = () => {
                     </Link>
                   ))}
                 </ul>
-              )}
+              )} */}
             </div>
 
             <div className="md:flex hidden">
@@ -126,13 +128,13 @@ const Navbar2 = () => {
                 <div tabIndex={0} role="button" className="">
                   <div className="flex justify-center items-center gap-5 ">
                     {/* login option */}
-                    {user ? (
+                    {data?.user_id ? (
                       <div className="md:flex items-center gap-3 hidden">
                         <Link to="/cart">
                           <div className="indicator pr-2">
                             <FaShoppingCart className="text-[22px] hover:text-[#f96331]" />
                             <span className="bg-[#F26734] text-white badge badge-md absolute top-[-12px] md:left-3 left-2">
-                              {cartItems}
+                              {/* {cartItems}  */}0
                             </span>
                           </div>
                         </Link>
@@ -150,7 +152,7 @@ const Navbar2 = () => {
                           Log Out
                         </button> */}
                         <button
-                          onClick={() => logOut()}
+                          // onClick={() => logOut()}
                           data-tip="logout"
                           className="lg:tooltip lg:tooltip-bottom"
                         >
@@ -174,7 +176,7 @@ const Navbar2 = () => {
               {/* <div className="md:hidden">
                 <IoIosHeartEmpty className="text-xl" />
               </div> */}
-              {user ? (
+              {/* {user ? (
                 <div
                   onClick={() => logOut()}
                   data-tip="logout"
@@ -182,7 +184,7 @@ const Navbar2 = () => {
                 >
                   <CiLogout className="text-xl " />
                 </div>
-              ) : null}
+              ) : null} */}
               {/*mobile  drawer */}
               <div className="drawer md:hidden">
                 <input
@@ -231,7 +233,7 @@ const Navbar2 = () => {
 
                     <div className="pt-12">
                       <ul className="flex flex-col gap-4">
-                        {grpData
+                        {/* {grpData
                           .filter((main) => main.is_group == 0)
                           ?.slice(0, 10)
                           .map((item, idx) => {
@@ -263,11 +265,11 @@ const Navbar2 = () => {
                                     <FaChevronDown className="text-blue-500 text-sm " />
                                   </a>
                                 </Link>
-                                <hr />
+                                <hr /> */}
 
-                                {/* sub category start */}
+                        {/* sub category start */}
 
-                                {/* <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
+                        {/* <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
                                   <Link
                                     to="/category"
                                     onClick={() =>
@@ -308,10 +310,10 @@ const Navbar2 = () => {
                                     </li>
                                   </Link>
                                 </ul> */}
-                                {/* sub category end */}
-                              </div>
+                        {/* sub category end */}
+                        {/* </div>
                             );
-                          })}
+                          })} */}
                       </ul>
                     </div>
                   </ul>

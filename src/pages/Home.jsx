@@ -1,18 +1,18 @@
 import { useContext } from "react";
-import Banner from "../components/banner/Banner";
-import MobileFram from "../components/mobileFrame/MobileFram";
-import PopularItem from "../components/popularItem/PopularItem";
-import SwiperMobile from "../components/swiperMobile/SwiperMobile";
-import Title from "../components/title/Title";
 import { GroupsContext, ItemContext, WebContext } from "../App";
+import Title from "../components/title/Title";
+import Banner from "../components/banner/Banner";
+import SwiperMobile from "../components/swiperMobile/SwiperMobile";
+import HotDeal from "../components/hotDeal/HotDeal";
 import Gadgets from "../components/gadgets/Gadgets";
 import Consumable from "../components/consumable/Consumable";
-import HotDeal from "../components/hotDeal/HotDeal";
 
 const HomeMain = () => {
   const grpData = useContext(GroupsContext);
   const webItmData = useContext(WebContext);
   const itemData = useContext(ItemContext);
+
+  console.log(grpData);
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -30,19 +30,21 @@ const HomeMain = () => {
           webItmData={webItmData}
           itemData={itemData}
         />
-        {grpData
-          .filter((filter) => filter.is_group == 0)
-          .map((grp, idx) => (
+        {grpData?.data
+          ?.filter(
+            (filter) => filter.is_group == 0 && filter.show_in_website == 1
+          )
+          ?.map((grp, idx) => (
             <Consumable
               key={idx}
               grp={grp.name}
-              idx={idx} 
+              idx={idx}
               itemData={itemData}
             />
           ))}
       </div>
-      <MobileFram />
-      <PopularItem />
+      {/* <MobileFram />
+      <PopularItem /> */}
     </div>
   );
 };

@@ -20,7 +20,9 @@ const Category = () => {
   }, [id]);
 
   let itmCount = (grp) => {
-    let filteredItems = webItmData.filter((item) => item.item_group === grp);
+    let filteredItems = webItmData?.data?.filter(
+      (item) => item.item_group === grp
+    );
     return filteredItems.length;
   };
 
@@ -33,7 +35,6 @@ const Category = () => {
   return (
     <>
       <Title title="Category" />
-
       <div className="max-w-screen-xl mx-auto px-4 mt-4">
         <Tabs
           selectedIndex={tabIndex}
@@ -49,9 +50,9 @@ const Category = () => {
                 role="tablist"
                 className="h-[calc(100vh-200px)] overflow-auto"
               >
-                {grpData
-                  .filter((main) => main.is_group == 0)
-                  .map((grp, index) => (
+                {grpData?.data
+                  ?.filter((main) => main.is_group == 0)
+                  ?.map((grp, index) => (
                     <Tab
                       key={index}
                       role="tab"
@@ -73,13 +74,13 @@ const Category = () => {
           </div>
 
           <div className="md:w-[80%] bg-white p-5 rounded">
-            {grpData
-              .filter((main) => main.is_group == 0)
+            {grpData?.data
+              ?.filter((main) => main.is_group == 0)
               .map((grp, index) => (
                 <TabPanel key={index} className="bg-transparent  ">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <h2 className="text-[18px] font-medium">
-                      {grp.name} - {itmCount(grp.name)} টি
+                      {grp?.name} - {itmCount(grp?.name)} টি
                     </h2>
                     <div>
                       <select className="select select-bordered select-xs w-52">
@@ -92,8 +93,8 @@ const Category = () => {
                   </div>
 
                   <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 ">
-                    {webItmData
-                      .filter((item) => item.item_group === grp.name)
+                    {webItmData?.data
+                      ?.filter((item) => item?.item_group === grp?.name)
                       .map((item, idx) => (
                         <Link to={`/item/${item.item_code}`} key={idx}>
                           <div className="text-center relative space-y-2 rounded hover:shadow-md p-2 hover:border">

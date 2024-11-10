@@ -19,8 +19,8 @@ import { base_url } from "../utilities/dataPanel";
 
 const Product = () => {
   const { name } = useParams();
-  const { user, userData } = useContext(UserContext);
-  const { cartItems, setCartItems } = useContext(CartContext);
+  // const { user, userData } = useContext(UserContext);
+  // const { cartItems, setCartItems } = useContext(CartContext);
   const webItmData = useContext(WebContext);
   const itemData = useContext(ItemContext);
   const [loader, setLoader] = useState(true);
@@ -28,9 +28,12 @@ const Product = () => {
   const [disable, setDisable] = useState();
   const [count, setCount] = useState(1);
   const [landingPath, setaLandingPath] = useState("");
+  const { data } = getStrdCart("login-info");
 
   useEffect(() => {
-    let itmFind = itemData.find((item) => item.name === name);
+    let itmFind = itemData?.data?.find((item) => item.name === name);
+
+    console.log(itmFind);
     let disable = itmFind?.custom_is_landing == 0 ? true : false;
     // let path =
     //   itmFind?.custom_select_landing_page === "Landing Page 2"
@@ -69,16 +72,14 @@ const Product = () => {
       qty: count,
       uom: landing?.stock_uom,
     };
-
     addToCart(newItem);
-
     let cart = getStrdCart("cart");
-    putCartDB(userData[0]?.name, cart).then((result) => {
-      if (result) {
-        toast("Cart Added");
-        setCartItems(cartItems + 1);
-      }
-    });
+    // putCartDB(userData[0]?.name, cart).then((result) => {
+    //   if (result) {
+    //     toast("Cart Added");
+    //     setCartItems(cartItems + 1);
+    //   }
+    // });
   };
 
   const [activeSize, setActiveSize] = useState(null);
@@ -183,8 +184,8 @@ const Product = () => {
                     </button>
                   ))}
                 </div>
-                </div>
-                {/* count  */}
+              </div>
+              {/* count  */}
               <div className="flex gap-12 mt-8">
                 <h1 className="text-[#757575]">Quantity</h1>
                 <div className="flex items-center cursor-pointer">
@@ -231,7 +232,7 @@ const Product = () => {
                   )}
                 </div>
                 <div className="flex-1">
-                  {user ? (
+                  {data?.user_id ? (
                     <button
                       onClick={() => handleAddCart()}
                       disabled={count > 0 ? false : true}
@@ -443,11 +444,11 @@ const Product = () => {
                 People Who Viewed This Item Also Viewed
               </h1>
               <div className="grid grid-cols-2 mt-6 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white p-2">
-                {webItmData
-                  .filter((web) => web.item_code !== name)
+                {webItmData?.data
+                  ?.filter((web) => web.item_code !== name)
                   .slice(0, 4)
                   .map((itm, idx) => {
-                    const foundItem = itemData.find(
+                    const foundItem = itemData?.data?.find(
                       (item) => item.name === itm.item_code
                     );
                     const cost = foundItem ? foundItem.standard_rate : 0;
@@ -455,11 +456,14 @@ const Product = () => {
                     return (
                       <Link
                         className="border-2 hover:shadow-lg rounded"
-                        to={`/item/${itm.item_code}`}
+                        to={`/item/${itm?.item_code}`}
                         key={idx}
                       >
                         <div className="mt-4  p-2">
-                          <img src={`${base_url + itm.website_image}`} alt="" />
+                          <img
+                            src={`${base_url + itm?.website_image}`}
+                            alt=""
+                          />
                           <p>{itm.web_item_name} </p>
                           <p className="flex items-center text-[#ff6801] text-[17px]">
                             <TbCurrencyTaka />

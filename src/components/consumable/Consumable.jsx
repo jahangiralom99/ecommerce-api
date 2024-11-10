@@ -9,7 +9,7 @@ const Consumable = ({ grp, idx, itemData }) => {
   const webItmData = useContext(WebContext);
 
   const rate = (id) => {
-    let fil = itemData.find((item) => item.item_code === id);
+    let fil = itemData?.data?.find((item) => item.item_code === id);
     return fil?.standard_rate;
   };
 
@@ -50,10 +50,10 @@ const Consumable = ({ grp, idx, itemData }) => {
         {/* card start */}
         <div className="max-w-screen-xl mx-auto px-5">
           <div className="grid grid-cols-2 md:grid-cols-4 items-center gap-1 max-w-screen-xl flex-wrap">
-            {webItmData
-              .filter((item) => item.item_group === grp)
-              .slice(0, 12)
-              .map((item, idx) => (
+            {webItmData?.data
+              ?.filter((item) => item.item_group === grp)
+              ?.slice(0, 12)
+              ?.map((item, idx) => (
                 <Link to={`../item/${item.item_code}`} key={idx}>
                   <div className="border-2 flex flex-col items-center justify-center h-[210px] bg-white">
                     <img

@@ -1,10 +1,9 @@
-import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import { Outlet, useLoaderData } from "react-router-dom";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import Navbar2 from "./components/navbar2/Navbar2";
 import MobileFooter from "./components/mobileFooter/MobileFooter";
-import { createContext, useEffect, useState } from "react";
-import { getStrdCart, getUser } from "./utilities/functions";
+import { createContext } from "react";
 import ScrollToTop from "./components/Shared/ScrollToTop";
 
 export const GroupsContext = createContext([]);
@@ -15,51 +14,50 @@ export const UserContext = createContext();
 
 const App = () => {
   const { groups, webItems, items } = useLoaderData();
-  const [cartItems, setCartItems] = useState(0);
-  const [userData, setUserData] = useState([]);
-  const [user, setUser] = useState("");
+  // const [cartItems, setCartItems] = useState(0);
+  // const [userData, setUserData] = useState([]);
+  // const [user, setUser] = useState("");
 
-  useEffect(() => {
-    let cart = getStrdCart("cart");
-    setCartItems(cart?.length ? cart?.length : 0);
-  }, [cartItems]);
+  // useEffect(() => {
+  //   let cart = getStrdCart("cart");
+  //   setCartItems(cart?.length ? cart?.length : 0);
+  // }, [cartItems]);
 
-  useEffect(() => {
-    let token = getStrdCart("token");
-    console.log("Token after clearing:", token);
-  
-    if (!token) {
-      setUser("");
-      setCartItems(0);
-      setUserData([]);
-      return;
-    }
-    
-    let parts = atob(decodeURIComponent(token)).split("_");
-  
-    console.log(parts, token);
-  
-    getUser(parts[0], parts[1])
-      .then((user) => {
-        if (user) {
-          setUserData([user]);
-          setUser(user?.customer_name);
-        } else {
-          setUser("");
-          setCartItems(0);
-          setUserData([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-      });
-  }, []);
-  
+  // useEffect(() => {
+  //   let token = getStrdCart("token");
+  //   console.log("Token after clearing:", token);
+
+  //   if (!token) {
+  //     setUser("");
+  //     setCartItems(0);
+  //     setUserData([]);
+  //     return;
+  //   }
+
+  //   let parts = atob(decodeURIComponent(token)).split("_");
+
+  //   console.log(parts, token);
+
+  //   getUser(parts[0], parts[1])
+  //     .then((user) => {
+  //       if (user) {
+  //         setUserData([user]);
+  //         setUser(user?.customer_name);
+  //       } else {
+  //         setUser("");
+  //         setCartItems(0);
+  //         setUserData([]);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching user:", error);
+  //     });
+  // }, []);
 
   return (
     <div>
-      <UserContext.Provider value={{ user, userData, setUser }}>
-        <CartContext.Provider value={{ cartItems, setCartItems }}>
+      <UserContext.Provider>
+        <CartContext.Provider>
           <GroupsContext.Provider value={groups}>
             <WebContext.Provider value={webItems}>
               <ItemContext.Provider value={items}>

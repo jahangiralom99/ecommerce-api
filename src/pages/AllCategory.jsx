@@ -25,9 +25,9 @@ const AllCategory = () => {
         {/* category div start */}
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-5">
-          {grpData
-            .filter((main) => main.is_group == 0)
-            .map((grp, idx) => (
+          {grpData?.data
+            ?.filter((main) => main.is_group == 0)
+            ?.map((grp, idx) => (
               <div key={idx} className="group relative cursor-pointer">
                 <div
                   className="flex justify-between items-center"
@@ -37,9 +37,7 @@ const AllCategory = () => {
                     <a href="#">
                       <img className="w-7" src={category1} alt="" />
                     </a>
-                    <a className="text-sm hover:text-[#F15B2D]">
-                      {grp.name}
-                    </a>
+                    <a className="text-sm hover:text-[#F15B2D]">{grp.name}</a>
                   </div>
                   <a>
                     <FaChevronDown className="text-blue-500 text-sm " />
@@ -49,9 +47,8 @@ const AllCategory = () => {
                 <hr />
                 {/* sub category start */}
                 <ul className="absolute w-60 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
-                  {grpData
-                    .filter((main) => main.is_group === 0)
-                    .map((grp, idx) =>
+                  {grpData?.data?.filter((main) => main.is_group === 0)
+                    ?.map((grp, idx) =>
                       grp.name == hoveredName ? (
                         <Link to={`/category/${idx}`} key={idx}>
                           <li className="mb-2 hover:text-[#F15B2D]">

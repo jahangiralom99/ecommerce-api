@@ -1,8 +1,10 @@
-import { fetch_url, header } from "./dataPanel";
+import { base_url, fetch_url, header } from "./dataPanel";
 
+// /getall?erp_url=erp_url&doctype_name=doctype_name
 export const loader = async () => {
+ 
   const groupsData = await fetch(
-    `${fetch_url}/gets/Item Group?filters=[["show_in_website", "=", 1]]&fields=["route","name", "image","is_group", "parent_item_group"]`,
+    `${fetch_url}/getall?erp_url=${base_url}&doctype_name=Item Group`,
     {
       method: "GET",
       headers: header,
@@ -10,8 +12,10 @@ export const loader = async () => {
   );
   const groups = await groupsData.json();
 
+  // console.log("groups", groups);
+
   const itemsData = await fetch(
-    `${fetch_url}/gets/Website Item?filters=[["published", "=", 1]]&fields=["*"]`,
+    `${fetch_url}/getall?erp_url=${base_url}&doctype_name=Website Item`,
     {
       method: "GET",
       headers: header,
@@ -19,14 +23,18 @@ export const loader = async () => {
   );
   const webItems = await itemsData.json();
 
+  // console.log(webItems);
+
   const itmRate = await fetch(
-    `${fetch_url}/gets/Item?filters=[["published_in_website", "=", 1]]&fields=["*"]`,
+    `${fetch_url}/getall?erp_url=${base_url}&doctype_name=Item`,
     {
       method: "GET",
       headers: header,
     }
   );
   const items = await itmRate.json();
+
+  // console.log(items);
 
   return { groups, webItems, items };
 };

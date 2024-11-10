@@ -3,46 +3,125 @@ import { useForm } from "react-hook-form";
 import { CiUser } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "../components/title/Title";
-import { addToProceed, getUser } from "../utilities/functions";
-import { CartContext, UserContext } from "../App";
+import { addToProceed, getStrdCart,  } from "../utilities/functions";
 import { BiHide, BiShowAlt } from "react-icons/bi";
+import { base_url, fetch_url } from "../utilities/dataPanel";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
-  const { setCartItems } = useContext(CartContext);
+  const { data } = getStrdCart("login-info");
+  // const { setCartItems } = useContext(CartContext);
   const { register, handleSubmit } = useForm();
   const [hide, setHide] = useState(false);
+  const [loading, setIsLoading] = useState();
+  const [value, setValue] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (data?.user_id) {
       return navigate("/");
     }
-  }, [user]);
+  }, [data]);
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  //   getUser(data.mail, data.password)
+  //     .then((user) => {
+  //       if (user) {
+  //         let cart = JSON.parse(user?.custom_cart);
+  //         toast(`Welcome ${user?.customer_name}`);
+  //         setUser(user?.customer_name);
+  //         addToProceed(
+  //           encodeURIComponent(btoa(`${data.mail}_${data.password}`)),
+  //           "token"
+  //         );
+  //         addToProceed(cart, "cart");
+  //         setCartItems(cart.length);
+  //         navigate("/");
+  //       } else {
+  //         toast("Validation Failed. Try Again");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching user:", error);
+  //     });
+  // };
 
   const onSubmit = (data) => {
-    console.log(data);
-    getUser(data.mail, data.password)
-      .then((user) => {
-        if (user) {
-          let cart = JSON.parse(user?.custom_cart);
-          toast(`Welcome ${user?.customer_name}`);
-          setUser(user?.customer_name);
-          addToProceed(
-            encodeURIComponent(btoa(`${data.mail}_${data.password}`)),
-            "token"
-          );
-          addToProceed(cart, "cart");
-          setCartItems(cart.length);
-          navigate("/");
+    const pass = data.password;
+    const user = data.mail;
+
+    const info = {
+      erp_url: base_url,
+      erp_data: {
+        usr: user,
+        pwd: pass,
+      },
+    };
+    console.log(info);
+    setIsLoading(true); 
+    fetch(`${fetch_url}/login`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(info),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.cookies) {
+          const info = {
+            data: data?.cookies,
+          };
+          addToProceed(info, "login-info");
+          // navigate("/");
+          setValue("login");
+          toast.success("Login Successfully", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            className: "custom-toast",
+          });
         } else {
-          toast("Validation Failed. Try Again");
+          // Trigger error toast if no cookies are found
+          toast.error("Invalid credentials. Please try again.", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            className: "custom-toast",
+          });
         }
       })
       .catch((error) => {
-        console.error("Error fetching user:", error);
+        toast.error("Login UnSuccessfully", {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          className: "custom-toast",
+        });
+        // toast.success("Login failed. Please try again.");
+        console.error("Login error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false); // Stop loader
       });
   };
 
@@ -67,7 +146,7 @@ const Login = () => {
               <div className="relative my-6">
                 <input
                   id="id-b03"
-                  type="email"
+                  type="text"
                   required
                   {...register("mail")}
                   className="peer relative h-10 w-full rounded border border-slate-200 px-4 text-sm text-slate-500 placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-gray-200 focus:outline-none invalid:focus:border-pink-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"

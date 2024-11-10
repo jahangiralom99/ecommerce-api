@@ -7,13 +7,13 @@ const SwiperMobile = () => {
   const grpData = useContext(GroupsContext);
   return (
     <div className="mt-3 md:hidden flex overflow-x-scroll gap-7 pb-3 pt-3 px-5">
-      {grpData.map((group, index) => (
+      {grpData?.data?.map((group, index) => (
         <Link to={`/category/${index}`} key={index}>
           <div className="flex justify-center items-center flex-col">
             <div className="border-2 w-20 bg-white rounded-full flex justify-center items-center">
               <img
                 className="w-20 h-20 object-cover rounded-full"
-                src={`${base_url + group.image}`}
+                src={`${base_url + group?.image}`}
                 alt=""
               />
             </div>

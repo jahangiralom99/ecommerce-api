@@ -20,12 +20,13 @@ const calculateTotalPrice = (cartData, quantities) => {
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { user, userData } = useContext(UserContext);
-  const { cartItems, setCartItems } = useContext(CartContext);
+  // const { user, userData } = useContext(UserContext);
+  // const { cartItems, setCartItems } = useContext(CartContext);
   const [cartItmData, setCartItmData] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loader, setLoader] = useState(true);
+  const { data } = getStrdCart("login-info");
 
   useEffect(() => {
     let cart = getStrdCart("cart");
@@ -48,11 +49,11 @@ const Cart = () => {
     removeToCart(key);
 
     let cart = getStrdCart("cart");
-    putCartDB(user, cart).then((result) => {
-      if (result) {
-        setCartItems(cartItems - 1);
-      }
-    });
+    // putCartDB(user, cart).then((result) => {
+    //   // if (result) {
+    //   //   setCartItems(cartItems - 1);
+    //   // }
+    // });
     setLoader(true);
   };
 
@@ -79,7 +80,7 @@ const Cart = () => {
     if (addToProceed(dataToSubmit, "cart")) {
       if (addToProceed(dataToProceed, "proceed")) {
         let cart = getStrdCart("cart");
-        putCartDB(userData[0]?.name, cart).then((result) => {
+        putCartDB(data?.full_name, cart).then((result) => {
           if (result) {
             navigate("/checkout");
           }

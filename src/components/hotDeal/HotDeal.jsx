@@ -13,7 +13,7 @@ const HotDeal = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   const rate = (id) => {
-    let fil = itemData.find((item) => item.item_code === id);
+    let fil = itemData?.data?.find((item) => item.item_code === id);
     return fil?.standard_rate;
   };
 
@@ -45,10 +45,10 @@ const HotDeal = (props) => {
           className=""
         >
           <TabList role="tablist" className="flex gap-1 py-2 flex-wrap ">
-            {grpData
-              .filter((filter) => filter.is_group == 0)
-              .slice(0, 8)
-              .map((grp, index) => (
+            {grpData?.data
+              ?.filter((filter) => filter?.is_group == 0)
+              ?.slice(0, 8)
+              ?.map((grp, index) => (
                 <Tab
                   key={index}
                   role="tab"
@@ -59,16 +59,16 @@ const HotDeal = (props) => {
               ))}
           </TabList>
 
-          {grpData
-            .filter((filter) => filter.is_group == 0)
-            .slice(1, 10)
-            .map((grp, index) => (
+          {grpData?.data
+            ?.filter((filter) => filter.is_group == 0)
+            ?.slice(1, 10)
+            ?.map((grp, index) => (
               <TabPanel key={index} className="bg-transparent md:my-5 my-2 ">
                 <div className="grid xl:grid-col-8 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
-                  {webItmData
-                    .filter((item) => item.item_group === grp.name)
-                    .slice(0, 10)
-                    .map((itm, index) => (
+                  {webItmData?.data
+                    ?.filter((item) => item.item_group === grp.name)
+                    ?.slice(0, 10)
+                    ?.map((itm, index) => (
                       <Link key={index} to={`/item/${itm?.item_code}`}>
                         <div className="flex flex-col items-center justify-center border-2 hover:shadow-lg md:h-full bg-white">
                           <img

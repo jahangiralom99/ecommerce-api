@@ -12,7 +12,7 @@ const Gadgets = (props) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   const rate = (id) => {
-    let fil = itemData.find((item) => item.item_code === id);
+    let fil = itemData?.data?.find((item) => item.item_code === id);
     return fil?.standard_rate;
   };
 
@@ -47,32 +47,31 @@ const Gadgets = (props) => {
             role="tablist"
             className="flex justify-center gap-1 py-2 flex-wrap "
           >
-            {grpData
-              .filter((filter) => filter.is_group == 0)
-
-              .slice(10, 20)
-              .map((grp, index) => (
+            {grpData?.data
+              ?.filter((filter) => filter.is_group == 0)
+              ?.slice(10, 20)
+              ?.map((grp, index) => (
                 <Tab
                   key={index}
                   role="tab"
                   className="tabs-bordered flex justify-center px-3 py-1  md:text-sm  text-xs border  bg-[#FF8C00] rounded-md text-white focus:outline-none focus:ring focus:ring-violet-300"
                 >
-                  {grp.name}
+                  {grp?.name}
                 </Tab>
               ))}
           </TabList>
 
-          {grpData
-            .filter((filter) => filter.is_group == 0)
+          {grpData?.data
+            ?.filter((filter) => filter.is_group == 0)
             .slice(10, 20)
             .map((grp, index) => (
               <TabPanel key={index} className="bg-transparent md:my-5 my-2 ">
                 <div className="flex justify-center items-center">
                   <div className="grid xl:grid-col-8 grid-cols-2 md:grid-cols-4 gap-2">
-                    {webItmData
-                      .filter((item) => item.item_group === grp.name)
-                      .slice(0, 4)
-                      .map((itm, index) => (
+                    {webItmData?.data
+                      ?.filter((item) => item.item_group === grp.name)
+                      ?.slice(0, 4)
+                      ?.map((itm, index) => (
                         <Link key={index} to={`/item/${itm?.item_code}`}>
                           <div className="border-2 hover:shadow-lg bg-white">
                             <img

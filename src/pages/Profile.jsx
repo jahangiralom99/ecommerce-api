@@ -1,9 +1,8 @@
-import {useContext} from "react";
-import {UserContext} from "../App";
-import {IoLocationOutline} from "react-icons/io5";
+import { IoLocationOutline } from "react-icons/io5";
+import { getStrdCart } from "../utilities/functions";
 
 const Profile = () => {
-  const {userData} = useContext(UserContext);
+  const { data } = getStrdCart("login-info");
 
   return (
     <div className="py-5 flex bg-[#EFF0F4] justify-center lg:gap-10 md:gap-3 flex-col md:flex-row ">
@@ -11,7 +10,7 @@ const Profile = () => {
 
       <section className="lg:w-[20%] md:pl-20 pl-3">
         <div>
-          <p className="text-sm pb-2">Hello, {userData[0]?.customer_name}</p>
+          <p className="text-sm pb-2">Hello, {data?.full_name}</p>
           <ul className="font-bold flex flex-col gap-3">
             <li>
               <p className="hover:text-blue-500"> Manage My Account </p>
@@ -40,7 +39,9 @@ const Profile = () => {
 
       {/* right section */}
       <section className="lg:w-[80%] ">
-        <h1 className="font-bold text-center md:text-start text-2xl pb-3 pl-3 md:pl-0 pt-5 md:pt-0">Manage My Account</h1>
+        <h1 className="font-bold text-center md:text-start text-2xl pb-3 pl-3 md:pl-0 pt-5 md:pt-0">
+          Manage My Account
+        </h1>
 
         <div className="flex gap-3 flex-col lg:flex-row">
           <div className="bg-white xl:w-[25%]  p-3 pb-10 ">
@@ -48,8 +49,8 @@ const Profile = () => {
               Personal Profile | <span className="text-blue-500">EDIT</span>
             </p>
             <br />
-            <p>{userData[0]?.customer_name}</p>
-            <p>{userData[0]?.email_id}</p>
+            <p>{data?.full_name}</p>
+            <p>{decodeURIComponent(data?.user_id)}</p>
             <br />
             <p className="text-blue-500">Subscribe to our Newsletter</p>
           </div>
@@ -63,7 +64,10 @@ const Profile = () => {
 
               <IoLocationOutline className="text-3xl" />
             </div>
-            <div className="pt-16 px-6 hidden md:block "> Save your billing address here</div>
+            <div className="pt-16 px-6 hidden md:block ">
+              {" "}
+              Save your billing address here
+            </div>
           </div>
         </div>
       </section>

@@ -3,8 +3,9 @@ import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import Navbar2 from "./components/navbar2/Navbar2";
 import MobileFooter from "./components/mobileFooter/MobileFooter";
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 import ScrollToTop from "./components/Shared/ScrollToTop";
+import { getStrdCart } from "./utilities/functions";
 
 export const GroupsContext = createContext([]);
 export const WebContext = createContext([]);
@@ -14,14 +15,15 @@ export const UserContext = createContext();
 
 const App = () => {
   const { groups, webItems, items } = useLoaderData();
-  // const [cartItems, setCartItems] = useState(0);
+  const [cartItems, setCartItems] = useState(0);
   // const [userData, setUserData] = useState([]);
   // const [user, setUser] = useState("");
 
-  // useEffect(() => {
-  //   let cart = getStrdCart("cart");
-  //   setCartItems(cart?.length ? cart?.length : 0);
-  // }, [cartItems]);
+  useEffect(() => {
+    let cart = getStrdCart("cart");
+    // console.log(cart);
+    setCartItems(cart?.length ? cart?.length : 0);
+  }, [cartItems]);
 
   // useEffect(() => {
   //   let token = getStrdCart("token");
@@ -57,7 +59,7 @@ const App = () => {
   return (
     <div>
       <UserContext.Provider>
-        <CartContext.Provider>
+        <CartContext.Provider value={{ cartItems, setCartItems }}>
           <GroupsContext.Provider value={groups}>
             <WebContext.Provider value={webItems}>
               <ItemContext.Provider value={items}>

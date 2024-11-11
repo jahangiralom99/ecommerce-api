@@ -5,9 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import Title from "../components/title/Title";
-import { addToProceed, getStrdCart,  } from "../utilities/functions";
+import { addToProceed, getStrdCart } from "../utilities/functions";
 import { BiHide, BiShowAlt } from "react-icons/bi";
 import { base_url, fetch_url } from "../utilities/dataPanel";
+import Loader from "../components/Shared/Loader";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Login = () => {
   // const { setCartItems } = useContext(CartContext);
   const { register, handleSubmit } = useForm();
   const [hide, setHide] = useState(false);
-  const [loading, setIsLoading] = useState();
+  const [loading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const Login = () => {
       },
     };
     console.log(info);
-    setIsLoading(true); 
+    setIsLoading(true);
     fetch(`${fetch_url}/login`, {
       method: "POST",
       headers: {
@@ -79,6 +80,7 @@ const Login = () => {
           addToProceed(info, "login-info");
           // navigate("/");
           setValue("login");
+          setIsLoading(false);
           toast.success("Login Successfully", {
             position: "top-center",
             autoClose: 1000,
@@ -106,6 +108,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
+        setIsLoading(false);
         toast.error("Login UnSuccessfully", {
           position: "top-center",
           autoClose: 1000,
@@ -124,6 +127,10 @@ const Login = () => {
         setIsLoading(false); // Stop loader
       });
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>

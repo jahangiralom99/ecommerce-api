@@ -53,7 +53,7 @@ const putCartDB = async (user, item) => {
 };
 
 const addToProceed = (newItem, store) => {
-  // localStorage.removeItem(`${window.location.hostname}-${store}`);
+  localStorage.removeItem(`${window.location.hostname}-${store}`);
   localStorage.setItem(
     `${window.location.hostname}-${store}`,
     JSON.stringify(newItem)
@@ -111,22 +111,28 @@ const getUser = (mail, pass) => {
     });
 };
 
-const postData = (docType, body) => {
-  return fetch(`${fetch_url}/posts/${docType}`, {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: header,
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((result) => {
-      if (result?.name) {
-        return result?.name;
-      } else {
-        return false;
-      }
+const postData = async (body) => {
+  try {
+    const response = await fetch(`${fetch_url}/post_data`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json", 
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     });
+
+    const result = await response.json();
+    return result || false;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    return false;
+  }
+};
+
+// clear card 
+const clearStoredCart = (store) => {
+  localStorage.removeItem(`${window.location.hostname}-${store}`);
 };
 
 export {
@@ -138,5 +144,6 @@ export {
   getStrdCart,
   getUser,
   postData,
+  clearStoredCart
   // getPhoneNumber
 };

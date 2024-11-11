@@ -13,12 +13,16 @@ import { base_url, fetch_url, header } from "../../utilities/dataPanel";
 import { MdLogout } from "react-icons/md";
 import { FaUserPen } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
+import LogOutModal from "../LogOutModal/LogOutModal";
 
 const Navbar2 = () => {
   const navigate = useNavigate();
   const { data } = getStrdCart("login-info");
+
+  const [logOutModal, setLogOutModal] = useState(false);
+
   const [user, setUser] = "";
-  // const { cartItems } = useContext(CartContext);
+  const { cartItems } = useContext(CartContext);
   // const { user, setUser } = useContext(UserContext);
   // const { setCartItems } = useContext(CartContext);
   // const [searchQuery, setSearchQuery] = useState("");
@@ -134,7 +138,7 @@ const Navbar2 = () => {
                           <div className="indicator pr-2">
                             <FaShoppingCart className="text-[22px] hover:text-[#f96331]" />
                             <span className="bg-[#F26734] text-white badge badge-md absolute top-[-12px] md:left-3 left-2">
-                              {/* {cartItems}  */}0
+                              {cartItems}
                             </span>
                           </div>
                         </Link>
@@ -152,7 +156,7 @@ const Navbar2 = () => {
                           Log Out
                         </button> */}
                         <button
-                          // onClick={() => logOut()}
+                          onClick={() => setLogOutModal(!logOutModal)}
                           data-tip="logout"
                           className="lg:tooltip lg:tooltip-bottom"
                         >
@@ -168,6 +172,9 @@ const Navbar2 = () => {
                       </Link>
                     )}
                   </div>
+                  {logOutModal && (
+                    <LogOutModal setLogOutModal={setLogOutModal} />
+                  )}
                 </div>
               </div>
             </div>

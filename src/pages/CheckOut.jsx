@@ -6,56 +6,128 @@ import {
   formatDate,
   getStrdCart,
   postData,
-  putCartDB,
+  // putCartDB,
 } from "../utilities/functions";
 import { toast } from "react-toastify";
-import { UserContext } from "../App";
+import { CartContext, } from "../App";
 import { useNavigate } from "react-router-dom";
+import { base_url } from "../utilities/dataPanel";
+import Loader from "../components/Shared/Loader";
 
 const Checkout = () => {
   const navigate = useNavigate();
   let proceedCart = getStrdCart("proceed");
-  const { userData } = useContext(UserContext);
+  let { data } = getStrdCart("login-info");
+  const { cartItems, setCartItems } = useContext(CartContext);
+  // const { userData } = useContext(UserContext);
   const [isChecked, setIsChecked] = useState(false);
   const { register, handleSubmit } = useForm();
-  const totalPrice = proceedCart.reduce((acc, item) => acc + item.amount, 0);
+  const [loader, setLoader] = useState(false);
+  const totalPrice = proceedCart?.reduce((acc, item) => acc + item.amount, 0);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
-  const onSubmit = () => {
-    proceedCart.forEach((item) => {
-      item.delivery_date = formatDate();
-    });
+  const dataToProceed = proceedCart?.map((data) => ({
+    item_code: data.item_code,
+    rate: data.rate,
+    item_name: data.item_name,
+    qty: data?.qty,
+    amount: data?.qty * data.rate,
+    delivery_date: formatDate(),
+  }));
 
-    let customerOrder = {
-      customer: userData[0]?.name,
-      transaction_date: formatDate(),
-      custom_delivery_type: "",
-      items: proceedCart,
+  // console.log(dataToProceed);
+
+  const onSubmit = async () => {
+    // proceedCart.forEach((item) => {
+    //   item.delivery_date = formatDate();
+    // });
+
+    // let customerOrder2 = {
+    //   customer: userData?.[0]?.name || "default_name",
+    //   transaction_date: formatDate(),
+    //   custom_delivery_type: "",
+    //   total_taxes_and_charges: totalValue || 0,
+    //   items: landing?.[0]
+    //     ? [
+    //         // check if landing exists
+    //         {
+    //           item_code: landing[0]?.item_code || "default_code",
+    //           item_name: landing[0]?.item_name || "default_name",
+    //           qty: 1,
+    //           rate: landing[0]?.standard_rate || 0,
+    //           amount: landing[0]?.standard_rate || 0,
+    //           uom: landing[0]?.stock_uom || "default_uom",
+    //           delivery_date: formatDate(),
+    //         },
+    //       ]
+    //     : [],
+    // };
+
+    let postBody1 = {
+      server: base_url,
+      doctype: "Sales Order",
+      data: {
+        // company: "IONIC Corporation",
+        // cost_center: selectedCostCenter,
+        customer: "C00006",
+        transaction_date: formatDate(),
+        custom_delivery_type: "",
+        items: dataToProceed,
+      },
     };
 
-    postData("Sales Order", customerOrder)
-      .then((isUser) => {
-        if (isUser) {
-          toast("Order is Created");
-          addToProceed([], "cart");
-          addToProceed([], "proceed");
-          putCartDB(userData[0]?.customer_name, []).then((result) => {
-            if (result) {
-              location.reload();
-              navigate("/");
-            }
-          });
-        } else {
-          console.log("Order is Not Created");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-      });
+    // let customerOrder = {
+    //   server: data.item_code,
+    //   doctype: "Sales Order",
+    //   customer: "C00006",
+    //   company: "IONIC Corporation",
+    //   transaction_date: formatDate(),
+    //   custom_delivery_type: "",
+    //   total_taxes_and_charges: totalPrice || 0,
+    //   items: dataToProceed || [],
+    // };
+
+    // console.log(postBody1);
+    setLoader(true);
+
+    const res = await postData(postBody1);
+    if (res) {
+      console.log(res);
+      toast("Order is Created");
+      addToProceed([], "cart");
+      addToProceed([], "proceed");
+      // location.reload();
+      navigate("/");
+      setCartItems(cartItems + 1);
+      setLoader(false);
+    }
+    console.log(res);
+    // .then((isUser) => {
+    //   if (isUser) {
+    //     toast("Order is Created");
+    //     addToProceed([], "cart");
+    //     addToProceed([], "proceed");
+    //     putCartDB(data?.full_name, []).then((result) => {
+    //       if (result) {
+    //         location.reload();
+    //         navigate("/");
+    //       }
+    //     });
+    //   } else {
+    //     console.log("Order is Not Created");
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.error("Error fetching user:", error);
+    // });
   };
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -78,7 +150,7 @@ const Checkout = () => {
                   className="w-full py-2 rounded-full bg-[#f5f5f5]  border-gray-300 border mt-2 px-6"
                   type="text"
                   placeholder="Your Name"
-                  value={userData[0]?.customer_name}
+                  value={data?.full_name}
                   required
                   {...register("firstName")}
                 />
@@ -98,7 +170,7 @@ const Checkout = () => {
                   className="w-full py-2 rounded-full bg-[#f5f5f5]  border-gray-300 border mt-2 px-6"
                   type="text"
                   placeholder="Street Address"
-                  value={userData[0]?.primary_address}
+                  // value={userData[0]?.primary_address}
                   required
                   {...register("address")}
                 />
@@ -133,7 +205,7 @@ const Checkout = () => {
                   className="w-full py-2 rounded-full bg-[#f5f5f5]  border-gray-300 border mt-2 px-6"
                   type="text"
                   placeholder="+8801*********"
-                  value={userData[0]?.mobile_no}
+                  // value={userData[0]?.mobile_no}
                   required
                   {...register("phone")}
                 />
@@ -147,7 +219,7 @@ const Checkout = () => {
                   className="w-full py-2 rounded-full bg-[#f5f5f5]  border-gray-300 border mt-2 px-6"
                   type="email"
                   placeholder="Email"
-                  value={userData[0]?.email_id}
+                  value={decodeURIComponent(data?.user_id)}
                   required
                   {...register("email")}
                 />

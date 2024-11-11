@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CartContext, ItemContext, UserContext, WebContext } from "../App";
+import { CartContext, ItemContext, WebContext } from "../App";
 import { BsCashCoin } from "react-icons/bs";
 import { CiHeart, CiShare2 } from "react-icons/ci";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
@@ -13,14 +13,14 @@ import ReactImageMagnify from "react-image-magnify";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Title from "../components/title/Title";
-import { addToCart, getStrdCart, putCartDB } from "../utilities/functions";
+import { addToCart, getStrdCart, } from "../utilities/functions";
 import { toast } from "react-toastify";
 import { base_url } from "../utilities/dataPanel";
 
 const Product = () => {
   const { name } = useParams();
   // const { user, userData } = useContext(UserContext);
-  // const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const webItmData = useContext(WebContext);
   const itemData = useContext(ItemContext);
   const [loader, setLoader] = useState(true);
@@ -73,11 +73,13 @@ const Product = () => {
       uom: landing?.stock_uom,
     };
     addToCart(newItem);
-    let cart = getStrdCart("cart");
+
+    // let cart = getStrdCart("cart");
+    toast("Cart Added");
+    setCartItems(cartItems + 1);
     // putCartDB(userData[0]?.name, cart).then((result) => {
     //   if (result) {
-    //     toast("Cart Added");
-    //     setCartItems(cartItems + 1);
+    //
     //   }
     // });
   };

@@ -4,12 +4,13 @@ import Title from "../components/title/Title";
 import {
   addToProceed,
   getStrdCart,
-  putCartDB,
+  // putCartDB,
   removeToCart,
 } from "../utilities/functions";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { CartContext, UserContext } from "../App";
+import { CartContext, } from "../App";
 import { base_url } from "../utilities/dataPanel";
+import { toast } from "react-toastify";
 
 const calculateTotalPrice = (cartData, quantities) => {
   return cartData?.reduce(
@@ -21,12 +22,12 @@ const calculateTotalPrice = (cartData, quantities) => {
 const Cart = () => {
   const navigate = useNavigate();
   // const { user, userData } = useContext(UserContext);
-  // const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const [cartItmData, setCartItmData] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loader, setLoader] = useState(true);
-  const { data } = getStrdCart("login-info");
+  // const { data } = getStrdCart("login-info");
 
   useEffect(() => {
     let cart = getStrdCart("cart");
@@ -47,6 +48,7 @@ const Cart = () => {
 
   const handleCartDel = (key) => {
     removeToCart(key);
+    setCartItems(cartItems - 1);
 
     let cart = getStrdCart("cart");
     // putCartDB(user, cart).then((result) => {
@@ -77,14 +79,19 @@ const Cart = () => {
       amount: quantities[idx] * data.standard_rate,
     }));
 
-    if (addToProceed(dataToSubmit, "cart")) {
-      if (addToProceed(dataToProceed, "proceed")) {
-        let cart = getStrdCart("cart");
-        putCartDB(data?.full_name, cart).then((result) => {
-          if (result) {
-            navigate("/checkout");
-          }
-        });
+    if (cartItmData.length === 0) {
+      toast.info("Please select Order Item");
+    } else {
+      if (addToProceed(dataToSubmit, "cart")) {
+        if (addToProceed(dataToProceed, "proceed")) {
+          // let cart = getStrdCart("cart");
+          navigate("/checkout");
+          // putCartDB(data?.full_name, cart).then((result) => {
+          //   if (result) {
+          //     navigate("/checkout");
+          //   }
+          // });
+        }
       }
     }
   };
@@ -213,14 +220,25 @@ const Cart = () => {
                   {totalPrice}৳{" "}
                 </p>
               </div>
-              <div className="bg-red-500 hover:bg-red-800 rounded-full text-center p-2 mt-6">
-                <button
-                  onClick={() => handleProceed()}
-                  className="text-white text-sm font-bold"
-                >
-                  PROCEED TO CHECKOUT
-                </button>
-              </div>
+              {cartItmData?.length > 0 ? (
+                <div className="bg-red-500 hover:bg-red-800 rounded-full text-center p-2 mt-6">
+                  <button
+                    onClick={() => handleProceed()}
+                    className="text-white text-sm font-bold"
+                  >
+                    PROCEED TO CHECKOUT
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-gray-300 cursor-not-allowed rounded-full text-center p-2 mt-6">
+                  <div
+                    // onClick={() => handleProceed()}
+                    className="text-white text-sm font-bold"
+                  >
+                    PROCEED TO CHECKOUT
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

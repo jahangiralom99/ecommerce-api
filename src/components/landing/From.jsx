@@ -1,17 +1,19 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { formatDate, postData } from "../../utilities/functions";
+import { formatDate, getStrdCart, postData } from "../../utilities/functions";
 import { toast } from "react-toastify";
 import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../../utilities/dataPanel";
+import Loader from "../Shared/Loader";
 
 const From = ({ formatStyle, landing }) => {
   const navigate = useNavigate();
-  const { userData } = useContext(UserContext);
+  // const { userData } = useContext(UserContext);
   const [totalValue, setTotalValue] = useState(0);
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
   const [order, setOrder] = useState("");
+  const { data: user } = getStrdCart("login-info");
 
   // const getPhoneNumber = (number) => {
   //   return fetch(
@@ -46,28 +48,45 @@ const From = ({ formatStyle, landing }) => {
   //   getPhoneNumber(e.target.value);
   // };
 
+  // let postBody1 = {
+  //   server: base_url,
+  //   doctype: "Sales Order",
+  //   data: {
+  //     // company: "IONIC Corporation",
+  //     // cost_center: selectedCostCenter,
+  //     customer: "C00006",
+  //     transaction_date: formatDate(),
+  //     custom_delivery_type: "",
+  //     items: dataToProceed,
+  //   },
+  // };
+
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     if (user) {
       let customerOrder = {
-        customer: userData?.[0]?.name || "default_name",
-        transaction_date: formatDate(),
-        custom_delivery_type: "",
-        total_taxes_and_charges: totalValue || 0,
-        items: landing?.[0]
-          ? [
-              // check if landing exists
-              {
-                item_code: landing[0]?.item_code || "default_code",
-                item_name: landing[0]?.item_name || "default_name",
-                qty: 1,
-                rate: landing[0]?.standard_rate || 0,
-                amount: landing[0]?.standard_rate || 0,
-                uom: landing[0]?.stock_uom || "default_uom",
-                delivery_date: formatDate(),
-              },
-            ]
-          : [],
+        server: base_url,
+        doctype: "Sales Order",
+        data: {
+          customer: "C00006",
+          transaction_date: formatDate(),
+          custom_delivery_type: "",
+          total_taxes_and_charges: totalValue || 0,
+          items: landing?.[0]
+            ? [
+                // check if landing exists
+                {
+                  item_code: landing[0]?.item_code || "default_code",
+                  item_name: landing[0]?.item_name || "default_name",
+                  qty: 1,
+                  rate: landing[0]?.standard_rate || 0,
+                  amount: landing[0]?.standard_rate || 0,
+                  uom: landing[0]?.stock_uom || "default_uom",
+                  delivery_date: formatDate(),
+                },
+              ]
+            : [],
+        },
       };
       postData("Sales Order", customerOrder)
         .then((isUser) => {
@@ -83,38 +102,47 @@ const From = ({ formatStyle, landing }) => {
         });
     } else {
       let newCustomer = {
-        customer_name: data.name,
-        customer_type: "Individual",
-        email_id: data.mail,
-        mobile_no: data.number,
-        primary_address: data.address,
+        server: base_url,
+        doctype: "Customer",
+        data: {
+          customer_name: data.name,
+          customer_type: "Individual",
+          email_id: data.mail,
+          mobile_no: data.number,
+          primary_address: data.address,
+        },
       };
       // toast("Order is Created successfully!");
       setOrder("Order is Created successfully!");
-      postData("Customer", newCustomer)
+      toast("Order is Created successfully!");
+      postData(newCustomer)
         .then((isUser) => {
-          if (isUser) {
+          if (isUser.response_data?.data?.name) {
             let customerOrder = {
-              customer: isUser || "default_name",
-              transaction_date: formatDate(),
-              custom_delivery_type: "",
-              total_taxes_and_charges: totalValue || 0,
-              items: landing?.[0]
-                ? [
-                    // check if landing exists
-                    {
-                      item_code: landing[0]?.item_code || "default_code",
-                      item_name: landing[0]?.item_name || "default_name",
-                      qty: 1,
-                      rate: landing[0]?.standard_rate || 0,
-                      amount: landing[0]?.standard_rate || 0,
-                      uom: landing[0]?.stock_uom || "default_uom",
-                      delivery_date: formatDate(),
-                    },
-                  ]
-                : [],
+              server: base_url,
+              doctype: "Sales Order",
+              data: {
+                customer: isUser.response_data?.data,
+                transaction_date: formatDate(),
+                custom_delivery_type: "",
+                total_taxes_and_charges: totalValue || 0,
+                items: landing?.[0]
+                  ? [
+                      // check if landing exists
+                      {
+                        item_code: landing[0]?.item_code || "default_code",
+                        item_name: landing[0]?.item_name || "default_name",
+                        qty: 1,
+                        rate: landing[0]?.standard_rate || 0,
+                        amount: landing[0]?.standard_rate || 0,
+                        uom: landing[0]?.stock_uom || "default_uom",
+                        delivery_date: formatDate(),
+                      },
+                    ]
+                  : [],
+              },
             };
-            postData("Sales Order", customerOrder)
+            postData(customerOrder)
               .then((isUser) => {
                 if (isUser) {
                   // toast("Order is Created");
@@ -128,7 +156,7 @@ const From = ({ formatStyle, landing }) => {
                 console.error("Error fetching user:", error);
               });
           } else {
-            console.log("User is Not Created");
+            console.log("Customer is Not Created");
           }
         })
         .catch((error) => {
@@ -193,6 +221,10 @@ const From = ({ formatStyle, landing }) => {
     }
   };
 
+  if (order === "Order is Created successfully!") {
+    return <Loader />;
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -218,7 +250,7 @@ const From = ({ formatStyle, landing }) => {
               <input
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
-                value={userData[0]?.customer_name}
+                value={user?.full_name}
                 {...register("name", { required: true })}
                 placeholder="আপনার নাম লিখুন"
                 id="text"
@@ -235,7 +267,7 @@ const From = ({ formatStyle, landing }) => {
               <input
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
-                value={userData[0]?.primary_address}
+                value={user?.primary_address}
                 {...register("address", { required: true })}
                 placeholder="আপনার ঠিকানা লিখুন"
                 id="text"
@@ -253,7 +285,7 @@ const From = ({ formatStyle, landing }) => {
                 // onChange={handleOnChange}
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="number"
-                value={userData[0]?.mobile_no}
+                // value={userData[0]?.mobile_no}
                 {...register("number", {
                   required: true,
                 })}
@@ -274,7 +306,7 @@ const From = ({ formatStyle, landing }) => {
               <input
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="mail"
-                value={userData[0]?.email_id}
+                value={decodeURIComponent(user?.user_id)}
                 {...register("mail", {
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for valid email

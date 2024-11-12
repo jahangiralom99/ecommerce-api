@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Title from "../components/title/Title";
@@ -8,7 +9,7 @@ import {
   removeToCart,
 } from "../utilities/functions";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { CartContext, } from "../App";
+import { CartContext } from "../App";
 import { base_url } from "../utilities/dataPanel";
 import { toast } from "react-toastify";
 
@@ -31,7 +32,7 @@ const Cart = () => {
 
   useEffect(() => {
     let cart = getStrdCart("cart");
-    setQuantities(cart?.map((item) => item.qty));
+    setQuantities(cart?.map((item) => item?.qty));
     setTotalPrice(calculateTotalPrice(cart, quantities));
     setCartItmData(cart);
     setLoader(false);
@@ -50,7 +51,7 @@ const Cart = () => {
     removeToCart(key);
     setCartItems(cartItems - 1);
 
-    let cart = getStrdCart("cart");
+    // let cart = getStrdCart("cart");
     // putCartDB(user, cart).then((result) => {
     //   // if (result) {
     //   //   setCartItems(cartItems - 1);
@@ -58,6 +59,7 @@ const Cart = () => {
     // });
     setLoader(true);
   };
+
 
   const handleProceed = () => {
     const dataToSubmit = cartItmData?.map((data, idx) => ({

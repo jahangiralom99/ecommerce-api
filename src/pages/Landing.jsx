@@ -27,7 +27,6 @@ const Item = () => {
   const [landing, setLanding] = useState([]);
 
 
-  console.log(itemData, name);
 
   useEffect(() => {
     let itmFind = itemData?.data?.find((item) => item.name === name);
@@ -36,7 +35,7 @@ const Item = () => {
     setLoader(false);
   }, [name, itemData]);
 
-  console.log(landing);
+
 
   const formatStyle = (params) => {
     if (landing[0] && landing[0][params]) {

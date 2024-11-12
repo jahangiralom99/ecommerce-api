@@ -60,7 +60,7 @@ const Login = () => {
         pwd: pass,
       },
     };
-    console.log(info);
+    // console.log(info);
     setIsLoading(true);
     fetch(`${fetch_url}/login`, {
       method: "POST",
@@ -72,7 +72,7 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data?.cookies) {
           const info = {
             data: data?.cookies,

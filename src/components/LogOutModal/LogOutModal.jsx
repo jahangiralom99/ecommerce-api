@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearStoredCart, getStrdCart } from "../../utilities/functions";
@@ -47,11 +48,13 @@ const LogOutModal = ({ setLogOutModal }) => {
         }
       })
       .then((err) => {
-        console.log(err);
+        // console.log(err);
+        setLogOutModal(false);
         setLoader(false);
       })
       .catch(() => {
         setLoader(false);
+        setLogOutModal(false);
       });
   };
 

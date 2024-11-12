@@ -80,6 +80,12 @@ const Gadgets = (props) => {
                               alt=""
                             />
                             <div className="flex justify-center items-center md:flex-col md:text-sm text-[15px]">
+                              {/* name */}
+                              <p className="flex justify-start items-center gap-1 md:pl-2">
+                                <p className="font-bold">
+                                  {itm?.item_name.slice(0, 18)}..
+                                </p>
+                              </p>
                               <p className="flex justify-start items-center gap-1 md:pl-2">
                                 <FaBangladeshiTakaSign className="hidden md:block" />
                                 <p className="font-bold">

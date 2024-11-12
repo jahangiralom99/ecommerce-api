@@ -29,7 +29,7 @@ const Banner = ({ grpData }) => {
 
             <Link to="/allCategory">
               <li className="py-[1px] flex justify-between items-center px-2">
-                <a href="#">All Categories &gt;&gt;</a>
+                <a>All Categories &gt;&gt;</a>
               </li>
             </Link>
           </ul>

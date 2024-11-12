@@ -10,6 +10,7 @@ import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
+  FaRegCopyright,
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
@@ -135,6 +136,23 @@ const Footer = () => {
           </div>
         </form>
       </footer>
+      <div className="flex pb-8 justify-center gap-1 items-center text-xs bg-[#404040] pt-3 text-white">
+        <div className="flex justify-center items-center">
+          <pre className="flex justify-center items-center font-bold">
+            Copyright <FaRegCopyright />{" "}
+          </pre>
+        </div>{" "}
+        <pre>
+          {" "}
+          <a className="text-sm hover:underline hover:text-[#F26734]" href="https://ioniccorporation.com/">
+            IONIC Corporation
+          </a>{" "}
+          2009
+        </pre>
+        <pre className="flex justify-center items-center font-bold text-[#404040]">
+          Jahangir Alam <FaRegCopyright />
+        </pre>
+      </div>
     </div>
   );
 };

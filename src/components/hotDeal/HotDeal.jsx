@@ -12,6 +12,7 @@ const HotDeal = (props) => {
   const { grpData, webItmData, itemData } = props;
   const [tabIndex, setTabIndex] = useState(0);
 
+
   const rate = (id) => {
     let fil = itemData?.data?.find((item) => item.item_code === id);
     return fil?.standard_rate;
@@ -77,6 +78,10 @@ const HotDeal = (props) => {
                             alt=""
                           />
                           <div className="flex justify-center items-center md:flex-col md:text-sm text-[15px]">
+                            {/* name */}
+                            <p className="flex justify-start items-center gap-1 md:pl-2">
+                              <p className="font-bold">{itm?.item_name.slice(0, 18)}..</p>
+                            </p>
                             <p className="flex justify-start items-center gap-1 md:pl-2">
                               <FaBangladeshiTakaSign className="hidden md:block" />
                               <p className="font-bold">

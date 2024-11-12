@@ -32,8 +32,6 @@ const Product = () => {
 
   useEffect(() => {
     let itmFind = itemData?.data?.find((item) => item.name === name);
-
-    console.log(itmFind);
     let disable = itmFind?.custom_is_landing == 0 ? true : false;
     // let path =
     //   itmFind?.custom_select_landing_page === "Landing Page 2"

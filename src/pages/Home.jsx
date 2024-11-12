@@ -6,13 +6,15 @@ import SwiperMobile from "../components/swiperMobile/SwiperMobile";
 import HotDeal from "../components/hotDeal/HotDeal";
 import Gadgets from "../components/gadgets/Gadgets";
 import Consumable from "../components/consumable/Consumable";
+import MobileFram from "../components/mobileFrame/MobileFram";
+import PopularItem from "../components/popularItem/PopularItem";
 
 const HomeMain = () => {
   const grpData = useContext(GroupsContext);
   const webItmData = useContext(WebContext);
   const itemData = useContext(ItemContext);
 
-  console.log(grpData);
+  // console.log(grpData);
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -43,8 +45,8 @@ const HomeMain = () => {
             />
           ))}
       </div>
-      {/* <MobileFram />
-      <PopularItem /> */}
+      <MobileFram />
+      <PopularItem />
     </div>
   );
 };

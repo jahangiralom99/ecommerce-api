@@ -12,8 +12,8 @@ const MobileFooter = () => {
           Online shopping BD: gawsiashop.com.bd is the largest online shopping
           marketplace has been launched inseptember, 2011. Online shopping BD:
           gawsiashop.com.bd is the largest online shopping marketplace has been
-          launched inseptember, 2011.Online shopping BD: gawsiashop.com.bd is the
-          largest online shopping marketplace has been launched inseptember,
+          launched inseptember, 2011.Online shopping BD: gawsiashop.com.bd is
+          the largest online shopping marketplace has been launched inseptember,
           2011.
         </p>
       </div>
@@ -38,7 +38,7 @@ const MobileFooter = () => {
           </ul>
         </p>
 
-        <p className="flex justify-center items-center text-xs text-blue-700 pt-3">
+        <div className="flex justify-center gap-3 items-center text-xs text-blue-700 pt-3">
           <div className="flex justify-center items-center">
             <pre className="flex justify-center items-center font-bold">
               Copyright <FaRegCopyright />{" "}
@@ -51,7 +51,10 @@ const MobileFooter = () => {
             </a>{" "}
             2009
           </pre>
-        </p>
+          <pre className="flex justify-center items-center font-bold text-slate-200">
+            Jahangir Alam <FaRegCopyright />
+          </pre>
+        </div>
       </div>
     </div>
   );

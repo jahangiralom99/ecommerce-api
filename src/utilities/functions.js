@@ -116,7 +116,7 @@ const postData = async (body) => {
     const response = await fetch(`${fetch_url}/post_data`, {
       method: "POST",
       headers: {
-        Accept: "application/json", 
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -130,7 +130,7 @@ const postData = async (body) => {
   }
 };
 
-// clear card 
+// clear card
 const clearStoredCart = (store) => {
   localStorage.removeItem(`${window.location.hostname}-${store}`);
 };
@@ -144,6 +144,6 @@ export {
   getStrdCart,
   getUser,
   postData,
-  clearStoredCart
+  clearStoredCart,
   // getPhoneNumber
 };

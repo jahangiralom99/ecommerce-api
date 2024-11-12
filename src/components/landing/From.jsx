@@ -15,6 +15,8 @@ const From = ({ formatStyle, landing }) => {
   const [order, setOrder] = useState("");
   const { data: user } = getStrdCart("login-info");
 
+  const email = decodeURIComponent(user?.user_id || "");
+
   // const getPhoneNumber = (number) => {
   //   return fetch(
   //     `${fetch_url}/gets/Customer?filters=[["mobile_no", "=", "${number}"]]&fields=["*"]`,
@@ -64,6 +66,7 @@ const From = ({ formatStyle, landing }) => {
   const onSubmit = (data) => {
     // console.log(data);
     if (user) {
+      setOrder("Order is Created successfully!");
       let customerOrder = {
         server: base_url,
         doctype: "Sales Order",
@@ -88,7 +91,7 @@ const From = ({ formatStyle, landing }) => {
             : [],
         },
       };
-      postData("Sales Order", customerOrder)
+      postData(customerOrder)
         .then((isUser) => {
           if (isUser) {
             toast("Order is Created");
@@ -122,7 +125,7 @@ const From = ({ formatStyle, landing }) => {
               server: base_url,
               doctype: "Sales Order",
               data: {
-                customer: isUser.response_data?.data,
+                customer: isUser.response_data?.data.name,
                 transaction_date: formatDate(),
                 custom_delivery_type: "",
                 total_taxes_and_charges: totalValue || 0,
@@ -145,7 +148,7 @@ const From = ({ formatStyle, landing }) => {
             postData(customerOrder)
               .then((isUser) => {
                 if (isUser) {
-                  // toast("Order is Created");
+                  toast("Order is Created");
                   navigate("/");
                 } else {
                   console.log("Order is Not Created");
@@ -264,7 +267,7 @@ const From = ({ formatStyle, landing }) => {
               <label className="block text-sm font-bold mb-2">
                 আপনার ঠিকানা <span className="text-red-500">*</span>
               </label>
-              <input
+              <input 
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="text"
                 value={user?.primary_address}
@@ -285,7 +288,7 @@ const From = ({ formatStyle, landing }) => {
                 // onChange={handleOnChange}
                 className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
                 type="number"
-                // value={userData[0]?.mobile_no}
+                // value={user?.mobile_no}
                 {...register("number", {
                   required: true,
                 })}
@@ -303,19 +306,35 @@ const From = ({ formatStyle, landing }) => {
               <label className="block text-sm font-bold mb-2">
                 মেইল <span className="text-[13px] font-normal">(Optional)</span>
               </label>
-              <input
-                className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
-                type="mail"
-                value={decodeURIComponent(user?.user_id)}
-                {...register("mail", {
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for valid email
-                    message: "সঠিক মেইল এড্রেস দিন", // Error message for invalid email
-                  },
-                })}
-                placeholder="আপনার মেইল"
-                id="number"
-              />
+              {user ? (
+                <input
+                  className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
+                  type="mail"
+                  value={email}
+                  {...register("mail", {
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for valid email
+                      message: "সঠিক মেইল এড্রেস দিন", // Error message for invalid email
+                    },
+                  })}
+                  placeholder="আপনার মেইল"
+                  id="number"
+                />
+              ) : (
+                <input
+                  className="bg-gray-200  focus:outline-none focus:shadow-outline border border-gray-300  py-3 px-4 block w-full appearance-none"
+                  type="mail"
+                  // value={email}
+                  {...register("mail", {
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Regex for valid email
+                      message: "সঠিক মেইল এড্রেস দিন", // Error message for invalid email
+                    },
+                  })}
+                  placeholder="আপনার মেইল"
+                  id="number"
+                />
+              )}
               {errors.mail && (
                 <p className="text-red-500 text-sm">{errors.mail.message}</p>
               )}{" "}

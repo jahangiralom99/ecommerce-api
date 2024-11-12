@@ -1,68 +1,49 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaRegUserCircle, FaShoppingCart } from "react-icons/fa";
-import { GrUserManager } from "react-icons/gr";
-import { IoIosHeartEmpty, IoIosLogOut } from "react-icons/io";
-import category1 from "../../assets/category1.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { CartContext, GroupsContext, UserContext } from "../../App";
+import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { CartContext, GroupsContext } from "../../App";
 import logo from "../../assets/ad-logo (1).svg";
-import { addToProceed, getStrdCart } from "../../utilities/functions";
-import { toast } from "react-toastify";
-import { base_url, fetch_url, header } from "../../utilities/dataPanel";
+import { getStrdCart } from "../../utilities/functions";
+import { base_url, fetch_url } from "../../utilities/dataPanel";
 import { MdLogout } from "react-icons/md";
 import { FaUserPen } from "react-icons/fa6";
-import { CiLogout } from "react-icons/ci";
 import LogOutModal from "../LogOutModal/LogOutModal";
+import { CiLogout } from "react-icons/ci";
 
 const Navbar2 = () => {
-  const navigate = useNavigate();
   const { data } = getStrdCart("login-info");
 
   const [logOutModal, setLogOutModal] = useState(false);
 
-  const [user, setUser] = "";
+  // const [user, setUser] = "";
   const { cartItems } = useContext(CartContext);
   // const { user, setUser } = useContext(UserContext);
   // const { setCartItems } = useContext(CartContext);
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [searchResult, setSearchResult] = useState([]);
-  // const grpData = useContext(GroupsContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const grpData = useContext(GroupsContext);
 
-  // const logOut = () => {
-  //   // Clear user session and cart data
-  //   addToProceed(null, "token"); // Remove the token
-  //   addToProceed(null, "cart"); // Remove the cart
-  //   setUser(""); // Reset the user state
-  //   setCartItems(0); // Reset cart items count
+  const handleSearch = async () => {
+    const query = encodeURIComponent(
+      `[["item_name", "like", "%${searchQuery}%"]]`
+    );
+    const url1 = `${fetch_url}/gets/Item?erp_url=${base_url}&filters=${query}&fields=["*"]`;
+    try {
+      const groupsData = await fetch(url1);
+      const data = await groupsData.json();
+      setSearchResult(data?.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  //   // Provide user feedback
-  //   toast("Logged out successfully");
-
-  //   // Redirect to the login page or home page
-  //   navigate("/login");
-  // };
-
-  // handle Search btn
-  // const handleSearch = async () => {
-  //   const query = encodeURIComponent(
-  //     `[["item_name", "like", "%${searchQuery}%"]]`
-  //   );
-  //   const url = `${fetch_url}/gets/Item?filters=${query}&fields=["*"]`;
-
-  //   try {
-  //     const groupsData = await fetch(url, {
-  //       method: "GET",
-  //       headers: header,
-  //     });
-
-  //     const data = await groupsData.json();
-  //     console.log(data);
-  //     setSearchResult(data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (searchQuery) {
+      handleSearch();
+    }
+  }, [searchQuery]);
 
   return (
     <div>
@@ -80,19 +61,21 @@ const Navbar2 = () => {
               <input
                 type="text"
                 placeholder="Search"
-                // onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery || ""}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className=" lg:w-[350px] md:w-[200px] w-32 rounded-none  bg-[#F5F5F5] md:block  py-[5px] md:py-2 px-4 border"
               />
             </div>
             {/* Display search results */}
             <div className="bg-white absolute overflow-y-scroll top-14 z-50 left-0">
-              {/* {searchResult.length > 0 && searchQuery && (
+              {searchResult.length > 0 && searchQuery && (
                 <ul className="h-44 md:w-96">
                   {searchResult.map((item, index) => (
                     <Link
                       to={`/item/${item?.item_code}`}
                       className="p-4 flex items-center gap-3 hover:border"
                       key={index}
+                      onClick={() => setSearchQuery("")}
                     >
                       <img
                         className="w-24 h-12 object-contain"
@@ -103,7 +86,7 @@ const Navbar2 = () => {
                     </Link>
                   ))}
                 </ul>
-              )} */}
+              )}
             </div>
 
             <div className="md:flex hidden">
@@ -183,15 +166,16 @@ const Navbar2 = () => {
               {/* <div className="md:hidden">
                 <IoIosHeartEmpty className="text-xl" />
               </div> */}
-              {/* {user ? (
+              {data ? (
                 <div
-                  onClick={() => logOut()}
+                  onClick={() => setLogOutModal(!logOutModal)}
+                  // onClick={() => logOut()}
                   data-tip="logout"
                   className="md:hidden hover:text-[#F05A2D] cursor-pointer tooltip tooltip-bottom"
                 >
                   <CiLogout className="text-xl " />
                 </div>
-              ) : null} */}
+              ) : null}
               {/*mobile  drawer */}
               <div className="drawer md:hidden">
                 <input
@@ -240,8 +224,8 @@ const Navbar2 = () => {
 
                     <div className="pt-12">
                       <ul className="flex flex-col gap-4">
-                        {/* {grpData
-                          .filter((main) => main.is_group == 0)
+                        {grpData?.data
+                          ?.filter((main) => main.is_group == 0)
                           ?.slice(0, 10)
                           .map((item, idx) => {
                             return (
@@ -272,11 +256,11 @@ const Navbar2 = () => {
                                     <FaChevronDown className="text-blue-500 text-sm " />
                                   </a>
                                 </Link>
-                                <hr /> */}
+                                <hr />
 
-                        {/* sub category start */}
+                                {/* sub category start */}
 
-                        {/* <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
+                                {/* <ul className="absolute w-52 left-8 top-6 group-hover:block hidden p-3 bg-white z-10">
                                   <Link
                                     to="/category"
                                     onClick={() =>
@@ -317,10 +301,10 @@ const Navbar2 = () => {
                                     </li>
                                   </Link>
                                 </ul> */}
-                        {/* sub category end */}
-                        {/* </div>
+                                {/* sub category end */}
+                              </div>
                             );
-                          })} */}
+                          })}
                       </ul>
                     </div>
                   </ul>
